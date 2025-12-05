@@ -374,6 +374,34 @@ export function App() {
     const [showWelcomeAnimation, setShowWelcomeAnimation] = useState(false)
     const [showAIAnimation, setShowAIAnimation] = useState(false)
 
+    // Clean up on initial load - ensure landing page shows for new visitors
+    useEffect(() => {
+        // Clean up expired tokens
+        const token = localStorage.getItem("lumra_token")
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split(".")[1]))
+                const now = Math.floor(Date.now() / 1000)
+                if (payload.exp <= now) {
+                    localStorage.removeItem("lumra_token")
+                    localStorage.removeItem("lumra_loggedIn")
+                    setIsLoggedInState(false)
+                }
+            } catch {
+                localStorage.removeItem("lumra_token")
+                localStorage.removeItem("lumra_loggedIn")
+                setIsLoggedInState(false)
+            }
+        }
+        
+        // Clean up invalid demo keys
+        const storedKey = localStorage.getItem("lumra_demo_key")
+        if (storedKey && storedKey !== "11223344") {
+            localStorage.removeItem("lumra_demo_key")
+            setHasValidDemoKey(false)
+        }
+    }, [])
+
     // Check if user has already accepted cookies
     useEffect(() => {
         const cookieConsent = localStorage.getItem('lumra_cookie_consent')
