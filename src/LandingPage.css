@@ -71,6 +71,19 @@
   box-shadow: 0 0 2px rgba(255, 255, 255, 0.8), 0 0 4px rgba(255, 255, 255, 0.4);
 }
 
+/* Scroll Animation Classes */
+.scroll-animate-out {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-animate-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0px);

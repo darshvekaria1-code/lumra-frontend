@@ -5,6 +5,35 @@ import {
 } from "lucide-react"
 import "./LandingPage.css"
 
+// Scroll Animation Hook
+function useScrollAnimation() {
+    const [isVisible, setIsVisible] = useState(false)
+    const ref = useRef<HTMLElement>(null)
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true)
+                }
+            },
+            { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+        )
+
+        if (ref.current) {
+            observer.observe(ref.current)
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current)
+            }
+        }
+    }, [])
+
+    return { ref, isVisible }
+}
+
 const API_BASE_URL = import.meta.env.VITE_LUMRA_API_BASE ?? "http://localhost:5050"
 
 type LandingPageProps = {
@@ -135,6 +164,20 @@ function RollingBackground() {
     )
 }
 
+// Scroll Section Component
+function ScrollSection({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+    const { ref, isVisible } = useScrollAnimation()
+    
+    return (
+        <section 
+            ref={ref as React.RefObject<HTMLDivElement>}
+            className={`${className} ${isVisible ? 'scroll-animate-in' : 'scroll-animate-out'}`}
+        >
+            {children}
+        </section>
+    )
+}
+
 // Starfield Component
 function Starfield() {
     const [stars, setStars] = useState<Array<{ x: number; y: number; size: number; opacity: number; delay: number }>>([])
@@ -224,8 +267,13 @@ function LaptopDemoSection() {
         }
     }, [showChat, chatMessages.length])
 
+    const { ref, isVisible } = useScrollAnimation()
+    
     return (
-        <section className="relative py-24 px-6 overflow-hidden z-10">
+        <section 
+            ref={ref as React.RefObject<HTMLDivElement>}
+            className={`relative py-24 px-6 overflow-hidden z-10 ${isVisible ? 'scroll-animate-in' : 'scroll-animate-out'}`}
+        >
             <div className="relative max-w-6xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     {/* Left - Laptop Container */}
@@ -569,7 +617,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </div>
                     
                     {/* Welcome Section */}
-                    <section className="relative py-32 px-6 overflow-hidden min-h-screen flex items-center justify-center z-10">
+                    <ScrollSection className="relative py-32 px-6 overflow-hidden min-h-screen flex items-center justify-center z-10">
 
                         <div className="relative max-w-5xl mx-auto text-center">
                             <div className="mb-12 animate-fade-in">
@@ -633,10 +681,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </ScrollSection>
 
                     {/* Demo Key Section */}
-                    <section className="demo-section py-32 px-6 relative overflow-hidden z-10">
+                    <ScrollSection className="demo-section py-32 px-6 relative overflow-hidden z-10">
                         <div className="relative max-w-5xl mx-auto text-center">
                             <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">Get Started with Your Demo Key</h2>
                             <p className="text-gray-400 mb-12 text-lg max-w-2xl mx-auto">
@@ -664,13 +712,13 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 {demoKeyError && <p className="text-red-400 text-sm">{demoKeyError}</p>}
                             </form>
                         </div>
-                    </section>
+                    </ScrollSection>
 
                     {/* Laptop Demo Section */}
                     <LaptopDemoSection />
 
                     {/* Features Section */}
-                    <section className="py-32 px-6 relative overflow-hidden z-10">
+                    <ScrollSection className="py-32 px-6 relative overflow-hidden z-10">
 
                         <div className="relative max-w-7xl mx-auto">
                             <div className="text-center mb-20 animate-fade-in">
@@ -713,10 +761,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 })}
                             </div>
                         </div>
-                    </section>
+                    </ScrollSection>
 
                     {/* Curriculum Section */}
-                    <section className="relative py-40 px-6 overflow-hidden z-10" data-section="curriculum">
+                    <ScrollSection className="relative py-40 px-6 overflow-hidden z-10" data-section="curriculum">
                         <div className="relative max-w-5xl mx-auto">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/50 border border-zinc-800 mb-8 backdrop-blur-sm relative group">
                                 <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
@@ -789,10 +837,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </ScrollSection>
 
                     {/* Chat Section */}
-                    <section className="py-32 px-6 relative overflow-hidden z-10">
+                    <ScrollSection className="py-32 px-6 relative overflow-hidden z-10">
 
                         <div className="relative max-w-5xl mx-auto">
                             <div className="text-center mb-16 animate-fade-in">
@@ -831,10 +879,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </ScrollSection>
 
                     {/* Newsletter/Contact Section */}
-                    <section className="py-32 px-6 relative overflow-hidden z-10">
+                    <ScrollSection className="py-32 px-6 relative overflow-hidden z-10">
 
                         <div className="relative max-w-6xl mx-auto">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -906,7 +954,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </ScrollSection>
                 </main>
 
                 {/* Footer */}
