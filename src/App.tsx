@@ -376,28 +376,43 @@ export function App() {
 
     // Clean up on initial load - ensure landing page shows for new visitors
     useEffect(() => {
-        // Clean up expired tokens
+        // Force check login state on mount
         const token = localStorage.getItem("lumra_token")
+        let isTokenValid = false
+        
         if (token) {
             try {
                 const payload = JSON.parse(atob(token.split(".")[1]))
                 const now = Math.floor(Date.now() / 1000)
-                if (payload.exp <= now) {
+                isTokenValid = payload.exp > now
+                if (!isTokenValid) {
+                    // Token expired, clean up
                     localStorage.removeItem("lumra_token")
                     localStorage.removeItem("lumra_loggedIn")
                     setIsLoggedInState(false)
+                } else {
+                    // Token is valid, ensure logged in state is true
+                    setIsLoggedInState(true)
                 }
             } catch {
+                // Invalid token, clean up
                 localStorage.removeItem("lumra_token")
                 localStorage.removeItem("lumra_loggedIn")
                 setIsLoggedInState(false)
             }
+        } else {
+            // No token, ensure logged out
+            setIsLoggedInState(false)
         }
         
         // Clean up invalid demo keys
         const storedKey = localStorage.getItem("lumra_demo_key")
         if (storedKey && storedKey !== "11223344") {
             localStorage.removeItem("lumra_demo_key")
+            setHasValidDemoKey(false)
+        } else if (storedKey === "11223344") {
+            setHasValidDemoKey(true)
+        } else {
             setHasValidDemoKey(false)
         }
     }, [])
