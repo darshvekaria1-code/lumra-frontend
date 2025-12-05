@@ -1133,7 +1133,13 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     >
                                         Try A Demo
                                     </button>
-                                    <button className="px-10 py-3.5 border-2 border-gray-600 text-white font-bold rounded-full text-lg hover:border-white hover:bg-white/5 transition-all duration-300">
+                                    <button 
+                                        className="px-10 py-3.5 border-2 border-gray-600 text-white font-bold rounded-full text-lg hover:border-white hover:bg-white/5 transition-all duration-300"
+                                        onClick={() => {
+                                            setShowDemoModal(true)
+                                            setDemoModalTab("request")
+                                        }}
+                                    >
                                         Get Started <ArrowRight className="inline-block ml-2 w-5 h-5" />
                                     </button>
                                 </div>
