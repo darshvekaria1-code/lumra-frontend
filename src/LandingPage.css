@@ -104,6 +104,18 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* Prevent scroll glitches */
@@ -115,6 +127,9 @@ html {
 main {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 @keyframes float {

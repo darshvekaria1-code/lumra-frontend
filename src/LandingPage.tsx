@@ -938,12 +938,12 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     }
 
     return (
-        <div className="flex min-h-screen bg-zinc-950 relative">
+        <div className="flex min-h-screen bg-zinc-950 relative overflow-hidden">
             <RollingBackground />
             <LeftBar />
 
             {/* Main Content - Scrollable */}
-            <div className="flex-1 flex flex-col overflow-hidden relative z-10">
+            <div className="flex-1 flex flex-col relative z-10 h-screen">
                 {/* Header */}
                 <header className="border-b border-zinc-800/50 backdrop-blur-md bg-zinc-950/80 sticky top-0 z-50">
                     <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -1116,10 +1116,12 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     )}
                 </header>
 
-                <main className="flex-1 overflow-y-auto custom-scrollbar relative" style={{ 
+                <main className="flex-1 overflow-y-auto custom-scrollbar relative h-full" style={{ 
                     scrollBehavior: 'smooth',
                     WebkitOverflowScrolling: 'touch',
-                    overscrollBehavior: 'contain'
+                    overscrollBehavior: 'contain',
+                    height: '100vh',
+                    overflowY: 'auto'
                 }}>
                     {/* Background for entire main content - seamless across all sections */}
                     <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none z-0">
