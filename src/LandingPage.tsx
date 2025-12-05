@@ -612,20 +612,40 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600 rounded-lg opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500 animate-pulse" />
                                     <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 rounded-lg opacity-10 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
                                     
-                                    <div className="w-7 h-7 rounded flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 text-white font-bold text-[10px] leading-tight relative z-10">
+                                    <img 
+                                        src="/logos/ib-logo.png" 
+                                        alt="International Baccalaureate" 
+                                        className="w-8 h-8 object-contain relative z-10"
+                                        onError={(e) => {
+                                            // Fallback to text if image fails to load
+                                            e.currentTarget.style.display = 'none'
+                                            const fallback = e.currentTarget.nextElementSibling as HTMLElement
+                                            if (fallback) fallback.style.display = 'flex'
+                                        }}
+                                    />
+                                    <div className="w-8 h-8 rounded flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 text-white font-bold text-[10px] leading-tight relative z-10 hidden">
                                         IB
                                     </div>
-                                    <span className="text-xs text-gray-300 font-medium relative z-10">IB</span>
                                 </div>
                                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-sm relative group">
                                     {/* Colorful aura effect for IGCSE */}
                                     <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 rounded-lg opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500 animate-pulse" />
                                     <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-400 via-red-400 to-orange-500 rounded-lg opacity-10 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
                                     
-                                    <div className="w-7 h-7 rounded flex items-center justify-center bg-gradient-to-br from-orange-600 to-orange-700 text-white font-bold text-[10px] leading-tight relative z-10">
+                                    <img 
+                                        src="/logos/igcse-logo.png" 
+                                        alt="Cambridge IGCSE" 
+                                        className="w-8 h-8 object-contain relative z-10"
+                                        onError={(e) => {
+                                            // Fallback to text if image fails to load
+                                            e.currentTarget.style.display = 'none'
+                                            const fallback = e.currentTarget.nextElementSibling as HTMLElement
+                                            if (fallback) fallback.style.display = 'flex'
+                                        }}
+                                    />
+                                    <div className="w-8 h-8 rounded flex items-center justify-center bg-gradient-to-br from-orange-600 to-orange-700 text-white font-bold text-[10px] leading-tight relative z-10 hidden">
                                         IGCSE
                                     </div>
-                                    <span className="text-xs text-gray-300 font-medium relative z-10">IGCSE</span>
                                 </div>
                             </div>
                         </div>
