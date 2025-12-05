@@ -11,33 +11,22 @@ function useScrollAnimation() {
     const ref = useRef<HTMLElement>(null)
 
     useEffect(() => {
-        const element = ref.current
-        if (!element) return
-
-        // Use requestAnimationFrame for better performance
         const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        // Use requestAnimationFrame to prevent scroll glitches
-                        requestAnimationFrame(() => {
-                            setIsVisible(true)
-                        })
-                    }
-                })
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true)
+                }
             },
-            { 
-                threshold: 0.1, 
-                rootMargin: '0px 0px -50px 0px',
-                // Use passive observation for better scroll performance
-            }
+            { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
         )
 
-        observer.observe(element)
+        if (ref.current) {
+            observer.observe(ref.current)
+        }
 
         return () => {
-            if (element) {
-                observer.unobserve(element)
+            if (ref.current) {
+                observer.unobserve(ref.current)
             }
         }
     }, [])
@@ -729,15 +718,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
     // Scroll chat to bottom when new messages arrive
     useEffect(() => {
-        if (chatEndRef.current) {
-            const chatContainer = chatEndRef.current.closest('.overflow-y-auto')
-            if (chatContainer) {
-                chatContainer.scrollTo({ 
-                    top: chatContainer.scrollHeight, 
-                    behavior: "smooth" 
-                })
-            }
-        }
+        chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [chatMessages])
 
     // Auto-conversation when section comes into view
@@ -938,12 +919,12 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     }
 
     return (
-        <div className="flex min-h-screen bg-zinc-950 relative overflow-hidden">
+        <div className="flex min-h-screen bg-zinc-950 relative">
             <RollingBackground />
             <LeftBar />
 
             {/* Main Content - Scrollable */}
-            <div className="flex-1 flex flex-col relative z-10 h-screen">
+            <div className="flex-1 flex flex-col overflow-hidden relative z-10">
                 {/* Header */}
                 <header className="border-b border-zinc-800/50 backdrop-blur-md bg-zinc-950/80 sticky top-0 z-50">
                     <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -978,16 +959,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                         e.preventDefault()
                                         if (item.scrollFn) {
                                             item.scrollFn()
-                                            } else {
-                                                const section = document.getElementById(item.id)
-                                                if (section) {
-                                                    const main = document.querySelector('main')
-                                                    if (main) {
-                                                        const offsetTop = section.offsetTop - 80
-                                                        main.scrollTo({ top: offsetTop, behavior: 'smooth' })
-                                                    }
-                                                }
-                                            }
+                                        } else {
+                                            const section = document.getElementById(item.id)
+                                            section?.scrollIntoView({ behavior: 'smooth' })
+                                        }
                                     }}
                                     className="text-gray-400 hover:text-gray-200 transition-colors duration-300 relative group text-sm cursor-pointer"
                                 >
@@ -1088,13 +1063,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                                 item.scrollFn()
                                             } else {
                                                 const section = document.getElementById(item.id)
-                                                if (section) {
-                                                    const main = document.querySelector('main')
-                                                    if (main) {
-                                                        const offsetTop = section.offsetTop - 80
-                                                        main.scrollTo({ top: offsetTop, behavior: 'smooth' })
-                                                    }
-                                                }
+                                                section?.scrollIntoView({ behavior: 'smooth' })
                                             }
                                         }}
                                         className="block text-gray-400 hover:text-gray-300 transition-colors"
@@ -1116,13 +1085,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     )}
                 </header>
 
-                <main className="flex-1 overflow-y-auto custom-scrollbar relative h-full" style={{ 
-                    scrollBehavior: 'smooth',
-                    WebkitOverflowScrolling: 'touch',
-                    overscrollBehavior: 'contain',
-                    height: '100vh',
-                    overflowY: 'auto'
-                }}>
+                <main className="flex-1 overflow-y-auto custom-scrollbar relative">
                     {/* Background for entire main content - seamless across all sections */}
                     <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none z-0">
                         {/* Starfield texture overlay */}
@@ -1164,14 +1127,8 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     <button 
                                         className="px-10 py-3.5 bg-white text-black font-bold rounded-full text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
                                         onClick={() => {
-                                            const demoSection = document.getElementById('demo-key')
-                                            if (demoSection) {
-                                                const main = document.querySelector('main')
-                                                if (main) {
-                                                    const offsetTop = demoSection.offsetTop - 80
-                                                    main.scrollTo({ top: offsetTop, behavior: 'smooth' })
-                                                }
-                                            }
+                                            const demoSection = document.querySelector('.demo-section')
+                                            demoSection?.scrollIntoView({ behavior: 'smooth' })
                                         }}
                                     >
                                         Try A Demo
@@ -1849,13 +1806,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                         onClick={() => {
                                             setShowInfoModal(false)
                                             const contactSection = document.getElementById('contact')
-                                            if (contactSection) {
-                                                const main = document.querySelector('main')
-                                                if (main) {
-                                                    const offsetTop = contactSection.offsetTop - 80
-                                                    main.scrollTo({ top: offsetTop, behavior: 'smooth' })
-                                                }
-                                            }
+                                            contactSection?.scrollIntoView({ behavior: 'smooth' })
                                         }}
                                         className="flex-1 px-6 py-3 rounded-lg font-medium text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 transition-all"
                                     >
