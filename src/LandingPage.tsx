@@ -1586,6 +1586,26 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 <p className="text-gray-400 text-sm leading-relaxed mb-6">
                                     The easiest way to learn from AI-powered courses. Personalized learning paths for students of all levels.
                                 </p>
+                                
+                                {/* Founders Section with Glow Effect */}
+                                <div className="mb-6">
+                                    <p className="text-gray-500 text-xs uppercase tracking-wider mb-3">Founders</p>
+                                    <div className="space-y-2">
+                                        <div className="relative inline-block group">
+                                            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-lg opacity-20 group-hover:opacity-40 blur-sm transition-opacity duration-300"></div>
+                                            <p className="relative text-white text-sm font-medium px-3 py-1.5 rounded-lg bg-zinc-900/50 border border-zinc-800/50">
+                                                Darsh Vekaria
+                                            </p>
+                                        </div>
+                                        <div className="relative inline-block group ml-2">
+                                            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-lg opacity-20 group-hover:opacity-40 blur-sm transition-opacity duration-300"></div>
+                                            <p className="relative text-white text-sm font-medium px-3 py-1.5 rounded-lg bg-zinc-900/50 border border-zinc-800/50">
+                                                Sidhant Sathe
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div className="flex gap-4">
                                     {[
                                         { icon: Twitter, href: "#", label: "Twitter" },
