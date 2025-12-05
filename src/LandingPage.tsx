@@ -580,6 +580,22 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                             >
                                 Try A Demo
                             </button>
+                            
+                            {/* IB and IGCSE Logos */}
+                            <div className="flex items-center gap-3 ml-4 pl-4 border-l border-zinc-800">
+                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-sm">
+                                    <div className="w-7 h-7 rounded flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 text-white font-bold text-[10px] leading-tight">
+                                        IB
+                                    </div>
+                                    <span className="text-xs text-gray-300 font-medium">IB</span>
+                                </div>
+                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-sm">
+                                    <div className="w-7 h-7 rounded flex items-center justify-center bg-gradient-to-br from-purple-600 to-purple-700 text-white font-bold text-[10px] leading-tight">
+                                        IGCSE
+                                    </div>
+                                    <span className="text-xs text-gray-300 font-medium">IGCSE</span>
+                                </div>
+                            </div>
                         </div>
 
                         <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
