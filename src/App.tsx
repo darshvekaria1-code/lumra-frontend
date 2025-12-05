@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react"
 import "./App.css"
+import LandingPage from "./LandingPage"
 
 type ResponseState = {
     status: "idle" | "loading" | "success" | "error"
@@ -289,6 +290,10 @@ function isValidPassword(password: string): { valid: boolean; error?: string } {
 
 export function App() {
     const [isLoggedIn, setIsLoggedInState] = useState<boolean>(checkLoggedIn())
+    const [hasValidDemoKey, setHasValidDemoKey] = useState<boolean>(() => {
+        // Check if user has a valid demo key stored
+        return !!localStorage.getItem("lumra_demo_key")
+    })
     const [showSignUp, setShowSignUp] = useState(false)
     
     // Login form state
@@ -1300,7 +1305,19 @@ export function App() {
         resetResponse()
     }
 
-    // Show login/sign up page if not logged in
+    // Show landing page if no demo key and not logged in
+    if (!isLoggedIn && !hasValidDemoKey) {
+        return (
+            <LandingPage 
+                onDemoKeySubmit={(key) => {
+                    setHasValidDemoKey(true)
+                    localStorage.setItem("lumra_demo_key", key)
+                }}
+            />
+        )
+    }
+
+    // Show login/sign up page if not logged in but has demo key
     if (!isLoggedIn) {
     return (
             <div className="lumra-login-container">
