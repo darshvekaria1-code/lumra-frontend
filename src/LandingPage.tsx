@@ -468,6 +468,11 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [showDemoModal, setShowDemoModal] = useState(false)
     const [headerDemoKey, setHeaderDemoKey] = useState("")
     const [headerDemoKeyError, setHeaderDemoKeyError] = useState("")
+    const [demoModalTab, setDemoModalTab] = useState<"enter" | "request">("enter")
+    const [requestName, setRequestName] = useState("")
+    const [requestEmail, setRequestEmail] = useState("")
+    const [requestStatus, setRequestStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+    const [requestError, setRequestError] = useState("")
 
     const handleDemoKeySubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -530,6 +535,56 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         } catch (error) {
             console.error("Error validating demo key:", error)
             setHeaderDemoKeyError("Error validating key. Please try again.")
+        }
+    }
+
+    const handleDemoKeyRequest = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!requestName.trim() || !requestEmail.trim()) {
+            setRequestError("Please fill in all fields")
+            return
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(requestEmail.trim())) {
+            setRequestError("Please enter a valid email address")
+            return
+        }
+
+        setRequestError("")
+        setRequestStatus("loading")
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/demo/request`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: requestName.trim(),
+                    email: requestEmail.trim(),
+                }),
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                setRequestStatus("success")
+                setRequestName("")
+                setRequestEmail("")
+                setTimeout(() => {
+                    setRequestStatus("idle")
+                    setShowDemoModal(false)
+                }, 3000)
+            } else {
+                setRequestStatus("error")
+                setRequestError(data.message || "Failed to submit request. Please try again.")
+            }
+        } catch (error) {
+            console.error("Error requesting demo key:", error)
+            setRequestStatus("error")
+            setRequestError("Error submitting request. Please try again.")
         }
     }
 
@@ -1031,15 +1086,29 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
                 {/* Demo Key Modal */}
                 {showDemoModal && (
-                    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowDemoModal(false)}>
+                    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => {
+                        setShowDemoModal(false)
+                        setHeaderDemoKey("")
+                        setHeaderDemoKeyError("")
+                        setRequestName("")
+                        setRequestEmail("")
+                        setRequestError("")
+                        setRequestStatus("idle")
+                        setDemoModalTab("enter")
+                    }}>
                         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-md w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-2xl font-bold text-white">Enter Demo Key</h2>
+                                <h2 className="text-2xl font-bold text-white">Get Demo Access</h2>
                                 <button
                                     onClick={() => {
                                         setShowDemoModal(false)
                                         setHeaderDemoKey("")
                                         setHeaderDemoKeyError("")
+                                        setRequestName("")
+                                        setRequestEmail("")
+                                        setRequestError("")
+                                        setRequestStatus("idle")
+                                        setDemoModalTab("enter")
                                     }}
                                     className="text-gray-400 hover:text-white transition-colors"
                                 >
@@ -1048,30 +1117,115 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     </svg>
                                 </button>
                             </div>
-                            <form onSubmit={handleHeaderDemoKeySubmit}>
-                                <div className="mb-4">
-                                    <input
-                                        type="text"
-                                        value={headerDemoKey}
-                                        onChange={(e) => {
-                                            setHeaderDemoKey(e.target.value)
-                                            setHeaderDemoKeyError("")
-                                        }}
-                                        placeholder="Enter your demo key"
-                                        className="w-full px-6 py-4 rounded-full bg-zinc-800/60 border border-zinc-700 text-white placeholder-gray-500 focus:outline-none focus:border-zinc-600 focus:bg-zinc-800 transition-all"
-                                        autoFocus
-                                    />
-                                </div>
-                                {headerDemoKeyError && (
-                                    <p className="text-red-400 text-sm mb-4">{headerDemoKeyError}</p>
-                                )}
+
+                            {/* Tabs */}
+                            <div className="flex gap-2 mb-6 border-b border-zinc-800">
                                 <button
-                                    type="submit"
-                                    className="w-full px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 transition-all transform hover:scale-105 active:scale-95 border border-gray-600"
+                                    onClick={() => {
+                                        setDemoModalTab("enter")
+                                        setHeaderDemoKeyError("")
+                                        setRequestError("")
+                                    }}
+                                    className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                                        demoModalTab === "enter"
+                                            ? "text-white border-b-2 border-white"
+                                            : "text-gray-400 hover:text-gray-300"
+                                    }`}
                                 >
-                                    Validate & Continue
+                                    Enter Code
                                 </button>
-                            </form>
+                                <button
+                                    onClick={() => {
+                                        setDemoModalTab("request")
+                                        setHeaderDemoKeyError("")
+                                        setRequestError("")
+                                    }}
+                                    className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+                                        demoModalTab === "request"
+                                            ? "text-white border-b-2 border-white"
+                                            : "text-gray-400 hover:text-gray-300"
+                                    }`}
+                                >
+                                    Request Key
+                                </button>
+                            </div>
+
+                            {/* Enter Code Tab */}
+                            {demoModalTab === "enter" && (
+                                <form onSubmit={handleHeaderDemoKeySubmit}>
+                                    <div className="mb-4">
+                                        <label className="block text-sm text-gray-400 mb-2">Verification Code</label>
+                                        <input
+                                            type="text"
+                                            value={headerDemoKey}
+                                            onChange={(e) => {
+                                                setHeaderDemoKey(e.target.value)
+                                                setHeaderDemoKeyError("")
+                                            }}
+                                            placeholder="Enter your demo key"
+                                            className="w-full px-6 py-4 rounded-full bg-zinc-800/60 border border-zinc-700 text-white placeholder-gray-500 focus:outline-none focus:border-zinc-600 focus:bg-zinc-800 transition-all"
+                                            autoFocus
+                                        />
+                                    </div>
+                                    {headerDemoKeyError && (
+                                        <p className="text-red-400 text-sm mb-4">{headerDemoKeyError}</p>
+                                    )}
+                                    <button
+                                        type="submit"
+                                        className="w-full px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 transition-all transform hover:scale-105 active:scale-95 border border-gray-600"
+                                    >
+                                        Validate & Continue
+                                    </button>
+                                </form>
+                            )}
+
+                            {/* Request Key Tab */}
+                            {demoModalTab === "request" && (
+                                <form onSubmit={handleDemoKeyRequest}>
+                                    <div className="mb-4">
+                                        <label className="block text-sm text-gray-400 mb-2">Full Name</label>
+                                        <input
+                                            type="text"
+                                            value={requestName}
+                                            onChange={(e) => {
+                                                setRequestName(e.target.value)
+                                                setRequestError("")
+                                            }}
+                                            placeholder="Enter your full name"
+                                            className="w-full px-6 py-4 rounded-full bg-zinc-800/60 border border-zinc-700 text-white placeholder-gray-500 focus:outline-none focus:border-zinc-600 focus:bg-zinc-800 transition-all"
+                                            required
+                                            autoFocus
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-sm text-gray-400 mb-2">Email Address</label>
+                                        <input
+                                            type="email"
+                                            value={requestEmail}
+                                            onChange={(e) => {
+                                                setRequestEmail(e.target.value)
+                                                setRequestError("")
+                                            }}
+                                            placeholder="Enter your email"
+                                            className="w-full px-6 py-4 rounded-full bg-zinc-800/60 border border-zinc-700 text-white placeholder-gray-500 focus:outline-none focus:border-zinc-600 focus:bg-zinc-800 transition-all"
+                                            required
+                                        />
+                                    </div>
+                                    {requestError && (
+                                        <p className="text-red-400 text-sm mb-4">{requestError}</p>
+                                    )}
+                                    {requestStatus === "success" && (
+                                        <p className="text-green-400 text-sm mb-4">Request submitted! We'll send you a demo key soon.</p>
+                                    )}
+                                    <button
+                                        type="submit"
+                                        disabled={requestStatus === "loading" || requestStatus === "success"}
+                                        className="w-full px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 transition-all transform hover:scale-105 active:scale-95 border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {requestStatus === "loading" ? "Submitting..." : requestStatus === "success" ? "Request Sent!" : "Request Demo Key"}
+                                    </button>
+                                </form>
+                            )}
                         </div>
                     </div>
                 )}
