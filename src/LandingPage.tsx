@@ -272,6 +272,7 @@ function LaptopDemoSection() {
     
     return (
         <section 
+            id="demo"
             ref={ref as React.RefObject<HTMLDivElement>}
             className={`relative py-24 px-6 overflow-hidden z-10 ${isVisible ? 'scroll-animate-in' : 'scroll-animate-out'}`}
         >
@@ -657,29 +658,32 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                         </div>
 
                         <div className="hidden md:flex items-center gap-8">
-                            <a
-                                href="#home"
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    window.scrollTo({ top: 0, behavior: 'smooth' })
-                                }}
-                                className="text-gray-400 hover:text-gray-200 transition-colors duration-300 relative group text-sm cursor-pointer"
-                            >
-                                Home
-                                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-500 group-hover:w-full transition-all duration-300" />
-                            </a>
-                            <a
-                                href="#demo-key"
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    const demoSection = document.getElementById('demo-key')
-                                    demoSection?.scrollIntoView({ behavior: 'smooth' })
-                                }}
-                                className="text-gray-400 hover:text-gray-200 transition-colors duration-300 relative group text-sm cursor-pointer"
-                            >
-                                Demo Key
-                                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-500 group-hover:w-full transition-all duration-300" />
-                            </a>
+                            {[
+                                { label: 'Home', id: 'home', scrollFn: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+                                { label: 'Demo Key', id: 'demo-key' },
+                                { label: 'AI Assistant', id: 'ai-assistant' },
+                                { label: 'Features', id: 'features' },
+                                { label: 'Curriculum', id: 'curriculum' },
+                                { label: 'Contact', id: 'contact' },
+                            ].map((item) => (
+                                <a
+                                    key={item.id}
+                                    href={`#${item.id}`}
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        if (item.scrollFn) {
+                                            item.scrollFn()
+                                        } else {
+                                            const section = document.getElementById(item.id)
+                                            section?.scrollIntoView({ behavior: 'smooth' })
+                                        }
+                                    }}
+                                    className="text-gray-400 hover:text-gray-200 transition-colors duration-300 relative group text-sm cursor-pointer"
+                                >
+                                    {item.label}
+                                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-500 group-hover:w-full transition-all duration-300" />
+                                </a>
+                            ))}
                         </div>
 
                         <div className="hidden md:flex items-center gap-4">
@@ -745,29 +749,32 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     {isOpen && (
                         <div className="md:hidden border-t border-zinc-800/50 bg-zinc-950/80 backdrop-blur-md animate-slide-down">
                             <div className="px-6 py-4 space-y-4">
-                                <a
-                                    href="#home"
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        setIsOpen(false)
-                                        window.scrollTo({ top: 0, behavior: 'smooth' })
-                                    }}
-                                    className="block text-gray-400 hover:text-gray-300 transition-colors"
-                                >
-                                    Home
-                                </a>
-                                <a
-                                    href="#demo-key"
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        setIsOpen(false)
-                                        const demoSection = document.getElementById('demo-key')
-                                        demoSection?.scrollIntoView({ behavior: 'smooth' })
-                                    }}
-                                    className="block text-gray-400 hover:text-gray-300 transition-colors"
-                                >
-                                    Demo Key
-                                </a>
+                                {[
+                                    { label: 'Home', id: 'home', scrollFn: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+                                    { label: 'Demo Key', id: 'demo-key' },
+                                    { label: 'AI Assistant', id: 'ai-assistant' },
+                                    { label: 'Features', id: 'features' },
+                                    { label: 'Curriculum', id: 'curriculum' },
+                                    { label: 'Contact', id: 'contact' },
+                                ].map((item) => (
+                                    <a
+                                        key={item.id}
+                                        href={`#${item.id}`}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            setIsOpen(false)
+                                            if (item.scrollFn) {
+                                                item.scrollFn()
+                                            } else {
+                                                const section = document.getElementById(item.id)
+                                                section?.scrollIntoView({ behavior: 'smooth' })
+                                            }
+                                        }}
+                                        className="block text-gray-400 hover:text-gray-300 transition-colors"
+                                    >
+                                        {item.label}
+                                    </a>
+                                ))}
                                 <button 
                                     className="w-full px-6 py-2 rounded-full font-medium text-white bg-gradient-to-r from-gray-700 to-gray-800 transition-all border border-gray-600"
                                     onClick={() => {
@@ -895,7 +902,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     <LaptopDemoSection />
 
                     {/* Features Section */}
-                    <ScrollSection className="py-32 px-6 relative overflow-hidden z-10">
+                    <ScrollSection id="features" className="py-32 px-6 relative overflow-hidden z-10">
 
                         <div className="relative max-w-7xl mx-auto">
                             <div className="text-center mb-20 animate-fade-in">
@@ -941,7 +948,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </ScrollSection>
 
                     {/* Curriculum Section */}
-                    <ScrollSection className="relative py-40 px-6 overflow-hidden z-10" data-section="curriculum">
+                    <ScrollSection id="curriculum" className="relative py-40 px-6 overflow-hidden z-10" data-section="curriculum">
                         <div className="relative max-w-5xl mx-auto">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/50 border border-zinc-800 mb-8 backdrop-blur-sm relative group">
                                 <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
@@ -1017,7 +1024,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </ScrollSection>
 
                     {/* Chat Section */}
-                    <ScrollSection className="py-32 px-6 relative overflow-hidden z-10">
+                    <ScrollSection id="ai-assistant" className="py-32 px-6 relative overflow-hidden z-10">
 
                         <div className="relative max-w-5xl mx-auto">
                             <div className="text-center mb-16 animate-fade-in">
@@ -1059,7 +1066,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </ScrollSection>
 
                     {/* Newsletter/Contact Section */}
-                    <ScrollSection className="py-32 px-6 relative overflow-hidden z-10">
+                    <ScrollSection id="contact" className="py-32 px-6 relative overflow-hidden z-10">
 
                         <div className="relative max-w-6xl mx-auto">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
