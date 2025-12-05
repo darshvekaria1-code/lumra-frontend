@@ -676,7 +676,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </section>
 
                     {/* Curriculum Section */}
-                    <section className="relative py-40 px-6 overflow-hidden" data-section="curriculum">
+                    <section className="relative py-40 px-6 overflow-hidden z-10" data-section="curriculum">
                         <div className="relative max-w-5xl mx-auto">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/50 border border-zinc-800 mb-8 backdrop-blur-sm relative group">
                                 <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
