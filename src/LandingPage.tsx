@@ -609,15 +609,18 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                             <div className="flex items-center gap-4 ml-4 pl-4 border-l border-zinc-800">
                                 <div className="flex items-center justify-center">
                                     <img 
-                                        src="/logos/ib-logo.svg" 
+                                        src="/logos/ib-logo.png" 
                                         alt="International Baccalaureate" 
                                         className="h-10 w-10 object-contain"
-                                        style={{ filter: 'brightness(1.1) contrast(1.1)' }}
+                                        style={{ filter: 'brightness(1.2) contrast(1.2)' }}
                                         onError={(e) => {
-                                            // Fallback to text if image fails to load
-                                            e.currentTarget.style.display = 'none'
-                                            const fallback = e.currentTarget.nextElementSibling as HTMLElement
-                                            if (fallback) fallback.style.display = 'flex'
+                                            // Try SVG fallback
+                                            e.currentTarget.src = '/logos/ib-logo.svg'
+                                            e.currentTarget.onerror = () => {
+                                                e.currentTarget.style.display = 'none'
+                                                const fallback = e.currentTarget.nextElementSibling as HTMLElement
+                                                if (fallback) fallback.style.display = 'flex'
+                                            }
                                         }}
                                     />
                                     <div className="h-10 w-10 rounded flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 text-white font-bold text-xs hidden">
@@ -626,15 +629,18 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 </div>
                                 <div className="flex items-center justify-center">
                                     <img 
-                                        src="/logos/igcse-logo.svg" 
+                                        src="/logos/igcse-logo.png" 
                                         alt="Cambridge Assessment International Education" 
                                         className="h-12 w-auto object-contain"
-                                        style={{ filter: 'brightness(1.1) contrast(1.1)' }}
+                                        style={{ filter: 'brightness(1.2) contrast(1.2)' }}
                                         onError={(e) => {
-                                            // Fallback to text if image fails to load
-                                            e.currentTarget.style.display = 'none'
-                                            const fallback = e.currentTarget.nextElementSibling as HTMLElement
-                                            if (fallback) fallback.style.display = 'flex'
+                                            // Try SVG fallback
+                                            e.currentTarget.src = '/logos/igcse-logo.svg'
+                                            e.currentTarget.onerror = () => {
+                                                e.currentTarget.style.display = 'none'
+                                                const fallback = e.currentTarget.nextElementSibling as HTMLElement
+                                                if (fallback) fallback.style.display = 'flex'
+                                            }
                                         }}
                                     />
                                     <div className="h-10 w-10 rounded flex items-center justify-center bg-gradient-to-br from-orange-600 to-orange-700 text-white font-bold text-xs hidden">
