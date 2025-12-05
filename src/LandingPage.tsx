@@ -153,6 +153,187 @@ function LeftBar() {
     )
 }
 
+// Laptop Demo Component
+function LaptopDemoSection() {
+    const [showChat, setShowChat] = useState(false)
+    const [chatMessages, setChatMessages] = useState([
+        {
+            type: "ai" as const,
+            text: "Hi! I'm Lumra AI, your personalized learning assistant. What would you like to learn today?",
+        },
+    ])
+    const [hasAnimated, setHasAnimated] = useState(false)
+
+    useEffect(() => {
+        const timer = setTimeout(() => setHasAnimated(true), 500)
+        return () => clearTimeout(timer)
+    }, [])
+
+    useEffect(() => {
+        if (showChat && chatMessages.length === 1) {
+            setTimeout(() => {
+                setChatMessages((prev) => [...prev, { type: "user" as const, text: "Can you help me learn machine learning?" }])
+            }, 800)
+
+            setTimeout(() => {
+                setChatMessages((prev) => [
+                    ...prev,
+                    {
+                        type: "ai" as const,
+                        text: "I've created a personalized ML learning path for you. We'll start with fundamentals and progress to advanced topics at your pace.",
+                    },
+                ])
+            }, 2000)
+        }
+    }, [showChat, chatMessages.length])
+
+    return (
+        <section className="relative py-24 px-6 overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-8 bg-gradient-to-br from-purple-600 to-cyan-600 animate-blob" />
+                <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl opacity-8 bg-gradient-to-bl from-cyan-500 to-purple-500 animate-blob animation-delay-2000" />
+            </div>
+
+            <div className="relative max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    {/* Left - Laptop Container */}
+                    <div
+                        className={`flex justify-center transition-all duration-700 ${hasAnimated ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"}`}
+                    >
+                        <div className="relative w-full max-w-md">
+                            {/* Laptop Body */}
+                            <div className="bg-gradient-to-b from-gray-300 to-gray-400 rounded-3xl p-1 shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                                {/* Screen */}
+                                <div className="bg-black rounded-2xl overflow-hidden shadow-inner relative">
+                                    {/* Screen Content */}
+                                    <div className="aspect-video bg-gradient-to-br from-zinc-900 via-zinc-950 to-black flex flex-col justify-between p-6 relative overflow-hidden">
+                                        {/* Background Pattern */}
+                                        <div className="absolute inset-0 opacity-20">
+                                            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:30px_30px]" />
+                                        </div>
+
+                                        {/* Header Bar */}
+                                        <div className="flex justify-between items-center relative z-10">
+                                            <div className="flex gap-2">
+                                                <div className="w-3 h-3 rounded-full bg-red-500" />
+                                                <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                                                <div className="w-3 h-3 rounded-full bg-green-500" />
+                                            </div>
+                                            <span className="text-gray-400 text-xs">Lumra AI Assistant</span>
+                                        </div>
+
+                                        {/* Chat Messages */}
+                                        <div className="flex-1 flex flex-col justify-end gap-3 overflow-hidden relative z-10">
+                                            {chatMessages.map((msg, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className={`animate-fade-in flex ${msg.type === "user" ? "justify-end" : "justify-start"}`}
+                                                    style={{ animationDelay: `${idx * 200}ms` }}
+                                                >
+                                                    <div
+                                                        className={`max-w-xs px-3 py-2 rounded-lg text-xs leading-relaxed ${
+                                                            msg.type === "user"
+                                                                ? "bg-gray-700 text-gray-100 rounded-br-none"
+                                                                : "bg-gray-800 text-gray-200 rounded-bl-none"
+                                                        }`}
+                                                    >
+                                                        {msg.text}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Input Bar */}
+                                        <div className="mt-4 relative z-10">
+                                            <input
+                                                type="text"
+                                                placeholder="Ask me anything..."
+                                                className="w-full bg-gray-900 border border-gray-700 text-gray-300 text-xs px-3 py-2 rounded-lg placeholder-gray-600 focus:outline-none"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Laptop Base */}
+                                <div className="h-8 bg-gradient-to-b from-gray-400 to-gray-500 rounded-b-3xl" />
+                            </div>
+
+                            {!showChat && (
+                                <div
+                                    className="absolute -right-8 top-1/3 cursor-pointer group animate-bounce"
+                                    onClick={() => setShowChat(true)}
+                                >
+                                    <div className="relative">
+                                        {/* Hand pointer */}
+                                        <div className="text-6xl transition-transform group-hover:scale-110">👆</div>
+                                        {/* Pulse effect */}
+                                        <div className="absolute inset-0 bg-gray-500 rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity" />
+                                    </div>
+                                    <p className="text-gray-400 text-xs mt-2 text-center whitespace-nowrap">Click to interact</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Right - Content */}
+                    <div
+                        className={`transition-all duration-700 delay-200 ${hasAnimated ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"}`}
+                    >
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/50 border border-zinc-800 mb-6 backdrop-blur-sm relative group">
+                            {/* Glow effect layers */}
+                            <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
+                            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 rounded-full blur-lg opacity-0 group-hover:opacity-75 transition-opacity duration-500" />
+
+                            <Zap className="w-3.5 h-3.5 text-gray-400 relative z-10" />
+                            <span className="text-xs tracking-wide text-gray-300 uppercase relative z-10 font-semibold">
+                                AI Assistant
+                            </span>
+                        </div>
+
+                        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                            Meet Your
+                            <br />
+                            <span className="bg-gradient-to-r from-cyan-200 via-white to-purple-200 bg-clip-text text-transparent">
+                                AI Learning Companion
+                            </span>
+                        </h2>
+
+                        <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                            Lumra AI is more than just a chatbot. It's your dedicated learning partner that understands your goals,
+                            adapts to your pace, and provides personalized guidance every step of the way.
+                        </p>
+
+                        <div className="space-y-4 mb-8">
+                            {[
+                                { icon: "🎯", title: "Adaptive Learning", desc: "Adjusts difficulty and pace to match your progress" },
+                                { icon: "💡", title: "Smart Recommendations", desc: "Suggests resources based on your learning style" },
+                                { icon: "📊", title: "Progress Tracking", desc: "Monitor your growth with detailed analytics" },
+                            ].map((item, idx) => (
+                                <div key={idx} className="flex gap-4 animate-fade-in" style={{ animationDelay: `${idx * 150}ms` }}>
+                                    <div className="text-2xl">{item.icon}</div>
+                                    <div>
+                                        <p className="text-white font-semibold text-sm">{item.title}</p>
+                                        <p className="text-gray-500 text-sm">{item.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {showChat && (
+                            <div className="inline-block animate-scale-in">
+                                <button className="px-6 py-3 rounded-lg font-medium text-white transition-all duration-300 transform hover:scale-105 active:scale-95 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 border border-cyan-400/20 flex items-center gap-2">
+                                    <MessageCircle className="w-4 h-4" />
+                                    Start Learning Now
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </section>
+    )
+}
+
 // Scroll Reveal Text Component
 function ScrollRevealText({ children, className = "" }: { children: string; className?: string }) {
     const ref = useRef<HTMLParagraphElement>(null)
@@ -450,6 +631,9 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                             </form>
                         </div>
                     </section>
+
+                    {/* Laptop Demo Section */}
+                    <LaptopDemoSection />
 
                     {/* Features Section */}
                     <section className="py-32 px-6 border-t border-zinc-800/50 relative overflow-hidden">
