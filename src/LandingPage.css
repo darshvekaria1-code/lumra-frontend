@@ -55,6 +55,22 @@
   }
 }
 
+@keyframes starfield {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.2);
+  }
+}
+
+.star-particle {
+  animation: starfield 4s ease-in-out infinite;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.8), 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0px);

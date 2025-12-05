@@ -135,6 +135,43 @@ function RollingBackground() {
     )
 }
 
+// Starfield Component
+function Starfield() {
+    const [stars, setStars] = useState<Array<{ x: number; y: number; size: number; opacity: number; delay: number }>>([])
+
+    useEffect(() => {
+        // Generate random stars/particles
+        const starCount = 200
+        const newStars = Array.from({ length: starCount }, () => ({
+            x: Math.random() * 100,
+            y: Math.random() * 100,
+            size: Math.random() * 2 + 0.5,
+            opacity: Math.random() * 0.8 + 0.2,
+            delay: Math.random() * 3,
+        }))
+        setStars(newStars)
+    }, [])
+
+    return (
+        <div className="absolute inset-0 overflow-hidden">
+            {stars.map((star, index) => (
+                <div
+                    key={index}
+                    className="absolute rounded-full bg-white star-particle"
+                    style={{
+                        left: `${star.x}%`,
+                        top: `${star.y}%`,
+                        width: `${star.size}px`,
+                        height: `${star.size}px`,
+                        opacity: star.opacity,
+                        animationDelay: `${star.delay}s`,
+                    }}
+                />
+            ))}
+        </div>
+    )
+}
+
 // Left Bar Component
 function LeftBar() {
     return (
@@ -526,7 +563,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
                 <main className="flex-1 overflow-y-auto custom-scrollbar relative">
                     {/* Background for entire main content - seamless across all sections */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none z-0" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none z-0">
+                        {/* Starfield texture overlay */}
+                        <Starfield />
+                    </div>
                     
                     {/* Welcome Section */}
                     <section className="relative py-32 px-6 overflow-hidden min-h-screen flex items-center justify-center z-10">
