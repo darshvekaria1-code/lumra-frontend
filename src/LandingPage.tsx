@@ -188,8 +188,7 @@ function LaptopDemoSection() {
     }, [showChat, chatMessages.length])
 
     return (
-        <section className="relative py-24 px-6 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none" />
+        <section className="relative py-24 px-6 overflow-hidden z-10">
             <div className="relative max-w-6xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     {/* Left - Laptop Container */}
@@ -525,10 +524,12 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     )}
                 </header>
 
-                <main className="flex-1 overflow-y-auto custom-scrollbar">
+                <main className="flex-1 overflow-y-auto custom-scrollbar relative">
+                    {/* Background for entire main content - seamless across all sections */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none z-0" />
+                    
                     {/* Welcome Section */}
-                    <section className="relative py-32 px-6 overflow-hidden min-h-screen flex items-center justify-center">
-                        <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none" />
+                    <section className="relative py-32 px-6 overflow-hidden min-h-screen flex items-center justify-center z-10">
 
                         <div className="relative max-w-5xl mx-auto text-center">
                             <div className="mb-12 animate-fade-in">
@@ -595,8 +596,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </section>
 
                     {/* Demo Key Section */}
-                    <section className="demo-section py-32 px-6 border-t border-zinc-800/50 relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none" />
+                    <section className="demo-section py-32 px-6 relative overflow-hidden z-10">
                         <div className="relative max-w-5xl mx-auto text-center">
                             <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">Get Started with Your Demo Key</h2>
                             <p className="text-gray-400 mb-12 text-lg max-w-2xl mx-auto">
@@ -630,8 +630,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     <LaptopDemoSection />
 
                     {/* Features Section */}
-                    <section className="py-32 px-6 border-t border-zinc-800/50 relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none" />
+                    <section className="py-32 px-6 relative overflow-hidden z-10">
 
                         <div className="relative max-w-7xl mx-auto">
                             <div className="text-center mb-20 animate-fade-in">
@@ -678,8 +677,6 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
                     {/* Curriculum Section */}
                     <section className="relative py-40 px-6 overflow-hidden" data-section="curriculum">
-                        <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none" />
-
                         <div className="relative max-w-5xl mx-auto">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/50 border border-zinc-800 mb-8 backdrop-blur-sm relative group">
                                 <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
@@ -755,8 +752,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </section>
 
                     {/* Chat Section */}
-                    <section className="py-32 px-6 border-t border-zinc-800/50 relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none" />
+                    <section className="py-32 px-6 relative overflow-hidden z-10">
 
                         <div className="relative max-w-5xl mx-auto">
                             <div className="text-center mb-16 animate-fade-in">
@@ -798,8 +794,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </section>
 
                     {/* Newsletter/Contact Section */}
-                    <section className="py-32 px-6 border-t border-zinc-800/50 relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none" />
+                    <section className="py-32 px-6 relative overflow-hidden z-10">
 
                         <div className="relative max-w-6xl mx-auto">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
