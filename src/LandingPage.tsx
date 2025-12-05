@@ -165,20 +165,23 @@ function RollingBackground() {
 }
 
 // Scroll Section Component
-function ScrollSection({ children, className = "", id, ref: externalRef }: { children: React.ReactNode; className?: string; id?: string; ref?: React.RefObject<HTMLDivElement> }) {
-    const { ref: scrollRef, isVisible } = useScrollAnimation()
-    const sectionRef = externalRef || scrollRef
-    
-    return (
-        <section 
-            id={id}
-            ref={sectionRef as React.RefObject<HTMLDivElement>}
-            className={`${className} ${isVisible ? 'scroll-animate-in' : 'scroll-animate-out'}`}
-        >
-            {children}
-        </section>
-    )
-}
+const ScrollSection = React.forwardRef<HTMLDivElement, { children: React.ReactNode; className?: string; id?: string }>(
+    ({ children, className = "", id }, ref) => {
+        const { ref: scrollRef, isVisible } = useScrollAnimation()
+        const sectionRef = (ref || scrollRef) as React.RefObject<HTMLDivElement>
+        
+        return (
+            <section 
+                id={id}
+                ref={sectionRef}
+                className={`${className} ${isVisible ? 'scroll-animate-in' : 'scroll-animate-out'}`}
+            >
+                {children}
+            </section>
+        )
+    }
+)
+ScrollSection.displayName = "ScrollSection"
 
 // Starfield Component
 function Starfield() {
