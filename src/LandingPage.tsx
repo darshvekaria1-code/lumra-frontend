@@ -513,6 +513,15 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [requestStatus, setRequestStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
     const [requestError, setRequestError] = useState("")
 
+    // Scroll to top when landing page loads
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' })
+        // Also clear any hash from URL
+        if (window.location.hash) {
+            window.history.replaceState(null, '', window.location.pathname)
+        }
+    }, [])
+
     const handleDemoKeySubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!demoKey.trim()) {
@@ -716,9 +725,15 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         }
     }
 
-    // Scroll chat to bottom when new messages arrive
+    // Scroll chat to bottom when new messages arrive (only within chat container, not page)
     useEffect(() => {
-        chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        // Only scroll if chat container is visible and user is interacting with it
+        if (chatEndRef.current && aiAssistantSectionRef.current) {
+            const chatContainer = chatEndRef.current.closest('.chat-container') || aiAssistantSectionRef.current
+            if (chatContainer) {
+                chatEndRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
+            }
+        }
     }, [chatMessages])
 
     // Auto-conversation when section comes into view
