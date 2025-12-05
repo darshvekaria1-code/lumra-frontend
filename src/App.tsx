@@ -136,8 +136,17 @@ function checkLoggedIn(): boolean {
     try {
         const payload = JSON.parse(atob(token.split(".")[1]))
         const now = Math.floor(Date.now() / 1000)
-        return payload.exp > now
+        const isValid = payload.exp > now
+        // If token is expired, clean it up
+        if (!isValid) {
+            localStorage.removeItem("lumra_token")
+            localStorage.removeItem("lumra_loggedIn")
+        }
+        return isValid
     } catch {
+        // Invalid token format, clean it up
+        localStorage.removeItem("lumra_token")
+        localStorage.removeItem("lumra_loggedIn")
         return false
     }
 }
@@ -289,10 +298,34 @@ function isValidPassword(password: string): { valid: boolean; error?: string } {
 }
 
 export function App() {
-    const [isLoggedIn, setIsLoggedInState] = useState<boolean>(checkLoggedIn())
+    // Always check fresh on mount to ensure correct initial state
+    const [isLoggedIn, setIsLoggedInState] = useState<boolean>(() => {
+        // Clear any invalid tokens on initial load
+        const token = localStorage.getItem("lumra_token")
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split(".")[1]))
+                const now = Math.floor(Date.now() / 1000)
+                if (payload.exp <= now) {
+                    // Token expired, clean up
+                    localStorage.removeItem("lumra_token")
+                    localStorage.removeItem("lumra_loggedIn")
+                    return false
+                }
+                return true
+            } catch {
+                // Invalid token, clean up
+                localStorage.removeItem("lumra_token")
+                localStorage.removeItem("lumra_loggedIn")
+                return false
+            }
+        }
+        return false
+    })
     const [hasValidDemoKey, setHasValidDemoKey] = useState<boolean>(() => {
-        // Check if user has a valid demo key stored
-        return !!localStorage.getItem("lumra_demo_key")
+        // Check if user has a valid demo key stored (only accept "11223344")
+        const storedKey = localStorage.getItem("lumra_demo_key")
+        return storedKey === "11223344"
     })
     const [showSignUp, setShowSignUp] = useState(false)
     
