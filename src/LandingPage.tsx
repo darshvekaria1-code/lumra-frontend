@@ -165,13 +165,14 @@ function RollingBackground() {
 }
 
 // Scroll Section Component
-function ScrollSection({ children, className = "", id }: { children: React.ReactNode; className?: string; id?: string }) {
-    const { ref, isVisible } = useScrollAnimation()
+function ScrollSection({ children, className = "", id, ref: externalRef }: { children: React.ReactNode; className?: string; id?: string; ref?: React.RefObject<HTMLDivElement> }) {
+    const { ref: scrollRef, isVisible } = useScrollAnimation()
+    const sectionRef = externalRef || scrollRef
     
     return (
         <section 
             id={id}
-            ref={ref as React.RefObject<HTMLDivElement>}
+            ref={sectionRef as React.RefObject<HTMLDivElement>}
             className={`${className} ${isVisible ? 'scroll-animate-in' : 'scroll-animate-out'}`}
         >
             {children}
@@ -478,7 +479,9 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         },
     ])
     const [isChatLoading, setIsChatLoading] = useState(false)
+    const [hasAutoConversationStarted, setHasAutoConversationStarted] = useState(false)
     const chatEndRef = useRef<HTMLDivElement>(null)
+    const aiAssistantSectionRef = useRef<HTMLDivElement>(null)
     const [headerDemoKey, setHeaderDemoKey] = useState("")
     const [headerDemoKeyError, setHeaderDemoKeyError] = useState("")
     const [demoModalTab, setDemoModalTab] = useState<"enter" | "request">("enter")
@@ -694,6 +697,86 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [chatMessages])
+
+    // Auto-conversation when section comes into view
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && !hasAutoConversationStarted) {
+                        setHasAutoConversationStarted(true)
+                        startAutoConversation()
+                    }
+                })
+            },
+            { threshold: 0.3 }
+        )
+
+        if (aiAssistantSectionRef.current) {
+            observer.observe(aiAssistantSectionRef.current)
+        }
+
+        return () => {
+            if (aiAssistantSectionRef.current) {
+                observer.unobserve(aiAssistantSectionRef.current)
+            }
+        }
+    }, [hasAutoConversationStarted])
+
+    const startAutoConversation = async () => {
+        // Wait 1 second after section is visible
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+
+        // User asks about yesterday's English class
+        const userQuestion = "What did I study yesterday in my English class and where did I miss something?"
+        setChatMessages((prev) => [...prev, { type: "user", text: userQuestion }])
+
+        // Wait 1.5 seconds before AI responds
+        await new Promise((resolve) => setTimeout(resolve, 1500))
+
+        setIsChatLoading(true)
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/chatgpt`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    prompt: userQuestion,
+                    system: "You are Lumra AI, a friendly and helpful personalized learning assistant for IB and IGCSE students. The user is asking about what they studied yesterday in English class and where they might have missed something. Provide a helpful, encouraging response that acknowledges their question and offers to help them review their English studies. Keep it under 200 words.",
+                    temperature: 0.7,
+                }),
+            })
+
+            const data = await response.json()
+
+            if (response.ok && data.response) {
+                setChatMessages((prev) => [...prev, { type: "ai", text: data.response }])
+            } else {
+                // Fallback response if API fails
+                setChatMessages((prev) => [
+                    ...prev,
+                    {
+                        type: "ai",
+                        text: "Based on your recent activity, you were working on essay writing techniques and literary analysis. I noticed you might have missed some key points about thesis statements and supporting evidence. Would you like me to help you review those concepts? I can create a quick summary of what you covered and highlight areas that might need more attention.",
+                    },
+                ])
+            }
+        } catch (error) {
+            console.error("Error in auto-conversation:", error)
+            // Fallback response
+            setChatMessages((prev) => [
+                ...prev,
+                {
+                    type: "ai",
+                    text: "Based on your recent activity, you were working on essay writing techniques and literary analysis. I noticed you might have missed some key points about thesis statements and supporting evidence. Would you like me to help you review those concepts? I can create a quick summary of what you covered and highlight areas that might need more attention.",
+                },
+            ])
+        } finally {
+            setIsChatLoading(false)
+        }
+    }
 
     const handleChatSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -1142,7 +1225,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </ScrollSection>
 
                     {/* Chat Section */}
-                    <ScrollSection id="ai-assistant" className="py-32 px-6 relative overflow-hidden z-10">
+                    <ScrollSection id="ai-assistant" ref={aiAssistantSectionRef} className="py-32 px-6 relative overflow-hidden z-10">
 
                         <div className="relative max-w-5xl mx-auto">
                             <div className="text-center mb-16 animate-fade-in">
