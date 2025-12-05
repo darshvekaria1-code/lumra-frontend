@@ -13,43 +13,6 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [contactStatus, setContactStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
     const [demoKey, setDemoKey] = useState("")
     const [demoKeyError, setDemoKeyError] = useState("")
-    const [expandedFaq, setExpandedFaq] = useState<number | null>(0)
-
-    const testimonials = [
-        { quote: "Highly recommend to anyone who codes!", author: "David Lee", role: "Independent Developer" },
-        { quote: "Boosts our team's daily workflow.", author: "Jessica Ramirez", role: "Senior Developer" },
-        { quote: "Helps us find the best solutions every time.", author: "Michael Carter", role: "CTO at InnovateTech" }
-    ]
-
-    const quickActions = [
-        { label: "Make a meal plan", icon: "▼" },
-        { label: "Fix my code", icon: "</>" },
-        { label: "Create a workout plan", icon: "💪" },
-        { label: "More Ideas", icon: "💡" }
-    ]
-
-    const faqs = [
-        {
-            question: "What is Lumra AI?",
-            answer: "Lumra AI is an AI-powered learning platform designed to assist with education, coding, text simplification, and real-time collaboration. Get personalized assistance and instant answers for all your learning needs."
-        },
-        {
-            question: "How does Lumra AI help with learning?",
-            answer: "Lumra AI provides personalized study plans, interactive Q&A sessions, document analysis, and 24/7 learning support. Our AI adapts to your learning style and helps you understand complex topics faster."
-        },
-        {
-            question: "How do I access Lumra AI?",
-            answer: "You need a demo key to access the platform. Enter your demo key on this page, and you'll be redirected to the sign-in page where you can create an account and start learning."
-        },
-        {
-            question: "Is Lumra AI suitable for beginners?",
-            answer: "Absolutely! Lumra AI is designed for learners of all levels. Whether you're a beginner or advanced, our AI adapts to your needs and provides explanations at the right level for you."
-        },
-        {
-            question: "What platforms does Lumra AI support?",
-            answer: "Lumra AI is a web-based platform accessible from any device with a modern browser. You can use it on desktop, tablet, or mobile devices."
-        }
-    ]
 
     const handleContactSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -129,53 +92,140 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                         <span className="logo-text">LUMRA</span>
                     </div>
                     <nav className="header-nav">
-                        <a href="#products">Products</a>
-                        <a href="#company">Company</a>
-                        <a href="#research">Research</a>
-                        <a href="#api">API</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="#blog">Blog</a>
+                        <a href="#about">About Us</a>
+                        <a href="#contact">Contact</a>
                     </nav>
-                    <button className="try-beta-btn">Try Beta Version</button>
+                    <button className="free-trial-btn" onClick={() => {
+                        const demoSection = document.querySelector('.demo-key-section')
+                        demoSection?.scrollIntoView({ behavior: 'smooth' })
+                    }}>Free Trial</button>
                 </div>
             </header>
 
-            {/* Testimonials Bar */}
-            <div className="testimonials-bar">
-                <div className="testimonial-item">
-                    <span className="testimonial-text">"{testimonials[0].quote}"</span>
-                    <span className="testimonial-author">- {testimonials[0].author}, {testimonials[0].role}</span>
-                </div>
-                <div className="testimonial-item">
-                    <span className="testimonial-text">"{testimonials[1].quote}"</span>
-                    <span className="testimonial-author">- {testimonials[1].author}, {testimonials[1].role}</span>
-                </div>
-                <div className="testimonial-item">
-                    <span className="testimonial-text">"{testimonials[2].quote}"</span>
-                    <span className="testimonial-author">- {testimonials[2].author}, {testimonials[2].role}</span>
-                </div>
-            </div>
-
             {/* Main Content */}
             <div className="main-content">
-                {/* Top Section - Landing */}
-                <section className="landing-top-section">
+                {/* Hero Section */}
+                <section className="hero-section">
                     <div className="ai-badge">
-                        <span className="badge-icon">✧</span>
-                        <span>Powered by AI Technology</span>
+                        <span>User-friendly AI platform</span>
                     </div>
                     
                     <h1 className="main-headline">
-                        <span className="headline-main">Smarter Learning</span>
-                        <span className="headline-sub">Starts with Lumra</span>
+                        New Era of Learning with AI ChatBot
                     </h1>
                     
                     <p className="main-description">
-                        Unlock smarter, faster, and more efficient learning with Lumra AI's advanced technology.
+                        AI-powered learning platform that leverages advanced AI technology to create personalized and engaging learning experiences for students and educators.
                     </p>
 
-                    {/* Demo Key Input */}
+                    <button 
+                        className="cta-button"
+                        onClick={() => {
+                            const demoSection = document.querySelector('.demo-key-section')
+                            demoSection?.scrollIntoView({ behavior: 'smooth' })
+                        }}
+                    >
+                        7 Days FREE Trial
+                    </button>
+
+                    <div className="social-proof">
+                        <div className="user-avatars">
+                            <div className="avatar">A</div>
+                            <div className="avatar">B</div>
+                            <div className="avatar">C</div>
+                        </div>
+                        <span className="user-count">500+ Active Users</span>
+                    </div>
+                </section>
+
+                {/* Content Panels */}
+                <section className="content-panels">
+                    {/* Left Panel - Demo/Example */}
+                    <div className="left-panel">
+                        <div className="demo-card">
+                            <div className="demo-card-header">
+                                <div className="demo-tag">AI Personalized</div>
+                                <div className="play-icon">▶</div>
+                            </div>
+                            <div className="demo-content">
+                                <h3 className="demo-title">Interactive Learning Example</h3>
+                                <p className="demo-description">
+                                    Experience how Lumra AI transforms complex topics into easy-to-understand explanations with interactive examples and real-time assistance.
+                                </p>
+                                <div className="demo-features">
+                                    <div className="feature-tag">📚 Study Plans</div>
+                                    <div className="feature-tag">💬 Q&A Support</div>
+                                    <div className="feature-tag">📝 Document Analysis</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Panel - AI Chatbot */}
+                    <div className="right-panel">
+                        <div className="ai-chatbot-section">
+                            <h3 className="section-title">AI chatbot</h3>
+                            <div className="progress-container">
+                                <div className="progress-bar">
+                                    <div className="progress-fill"></div>
+                                </div>
+                                <span className="progress-text">+50% of learning completed</span>
+                            </div>
+                            
+                            <div className="chat-examples">
+                                <div className="chat-message user">
+                                    <span className="quote-mark">"</span>
+                                    <span className="message-text">help me understand this task</span>
+                                </div>
+                                <div className="chat-message ai">
+                                    <span className="message-text">I'll break down this task into simple steps for you. Let's start by identifying the key concepts...</span>
+                                    <span className="flag-icon">🇺🇸</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="personalized-lessons">
+                            <div className="lesson-card">
+                                <div className="lesson-header">
+                                    <span className="lesson-icon">📖</span>
+                                    <h4>Your daily study plan is ready!</h4>
+                                </div>
+                                <div className="lesson-meta">
+                                    <span className="meta-item">⏱ 20min</span>
+                                    <span className="meta-item">📋 3 Tasks</span>
+                                </div>
+                            </div>
+                            
+                            <div className="lesson-card">
+                                <div className="lesson-header">
+                                    <span className="lesson-icon">✏️</span>
+                                    <h4>Practice exercises available!</h4>
+                                </div>
+                                <div className="lesson-meta">
+                                    <span className="meta-item">⏱ 15min</span>
+                                    <span className="meta-item">📋 2 Tasks</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="new-content-section">
+                            <h4 className="section-subtitle">New Content for You</h4>
+                            <div className="content-placeholders">
+                                <div className="content-box"></div>
+                                <div className="content-box"></div>
+                                <div className="content-box"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Demo Key Section */}
+                <section className="demo-key-section">
+                    <h2 className="section-heading">Get Started with Your Demo Key</h2>
                     <form onSubmit={handleDemoKeySubmit} className="demo-key-form">
                         <div className="input-wrapper">
-                            <span className="input-icon">🔗</span>
                             <input
                                 type="text"
                                 value={demoKey}
@@ -183,89 +233,77 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     setDemoKey(e.target.value)
                                     setDemoKeyError("")
                                 }}
-                                placeholder="Type any message you'd like..."
+                                placeholder="Enter your demo key"
                                 className="demo-key-input"
                             />
                             <button type="submit" className="generate-btn">
-                                Generate Now
+                                Start Learning
                             </button>
                         </div>
                         {demoKeyError && <p className="error-message">{demoKeyError}</p>}
                     </form>
+                </section>
 
-                    {/* Quick Actions */}
-                    <div className="quick-actions">
-                        {quickActions.map((action, index) => (
-                            <button key={index} className="action-btn">
-                                <span className="action-icon">{action.icon}</span>
-                                <span>{action.label}</span>
-                            </button>
-                        ))}
+                {/* AI Features Section */}
+                <section className="ai-features-section">
+                    <h2 className="section-heading">AI-Powered Features</h2>
+                    <div className="features-grid">
+                        <div className="feature-card">
+                            <div className="feature-icon">🤖</div>
+                            <h3>Smart AI Assistant</h3>
+                            <p>Get instant answers to your questions with our advanced AI chatbot that understands context and provides detailed explanations.</p>
+                        </div>
+                        <div className="feature-card">
+                            <div className="feature-icon">📚</div>
+                            <h3>Personalized Learning</h3>
+                            <p>AI adapts to your learning style and pace, creating customized study plans and recommendations just for you.</p>
+                        </div>
+                        <div className="feature-card">
+                            <div className="feature-icon">📝</div>
+                            <h3>Document Analysis</h3>
+                            <p>Upload documents and get AI-powered summaries, key points extraction, and detailed explanations of complex topics.</p>
+                        </div>
+                        <div className="feature-card">
+                            <div className="feature-icon">💬</div>
+                            <h3>24/7 Support</h3>
+                            <p>Access learning assistance anytime, anywhere. Our AI is always ready to help you understand difficult concepts.</p>
+                        </div>
                     </div>
                 </section>
 
-                {/* Bottom Section - Chat Interface */}
-                <section className="chat-interface-section">
-                    <div className="chat-panel">
-                        <div className="chat-panel-header">
-                            <div className="chat-header-left">
-                                <span className="chat-icon">📄</span>
-                                <span className="chat-icon">✏️</span>
-                            </div>
-                            <div className="chat-header-center">
-                                <div className="chat-logo">
-                                    <div className="logo-icon-animated">✧</div>
-                                    <span>Lumra</span>
-                                    <span className="dropdown-arrow">▼</span>
-                                </div>
-                            </div>
-                            <div className="chat-header-right">
-                                <span className="chat-icon">⊞</span>
-                                <span className="chat-icon">👤</span>
-                            </div>
+                {/* Contact Section */}
+                <section className="contact-section">
+                    <h2 className="section-heading">Contact Us</h2>
+                    <p className="section-description">Have questions? We'd love to hear from you!</p>
+                    <form onSubmit={handleContactSubmit} className="contact-form">
+                        <div className="form-group">
+                            <input
+                                type="email"
+                                value={contactEmail}
+                                onChange={(e) => setContactEmail(e.target.value)}
+                                placeholder="Your email"
+                                className="form-input"
+                                required
+                            />
                         </div>
-                        
-                        <div className="chat-content-area">
-                            <div className="chat-welcome-center">
-                                <div className="welcome-icon-large">✧</div>
-                                <p className="welcome-text">Welcome Back,</p>
-                                <p className="welcome-text">How Can I Help You?</p>
-                            </div>
-                            
-                            <div className="chat-suggestions-grid">
-                                {[...Array(6)].map((_, index) => (
-                                    <button key={index} className="chat-suggestion-btn">
-                                        <span className="suggestion-icon">▼</span>
-                                        <span>Make a meal plan</span>
-                                    </button>
-                                ))}
-                            </div>
-                            
-                            <div className="chat-input-area">
-                                <span className="input-icon">🔗</span>
-                                <input
-                                    type="text"
-                                    placeholder="Type any message you'd like"
-                                    className="chat-input"
-                                    readOnly
-                                />
-                                <button className="chat-generate-btn">Generate Now</button>
-                            </div>
+                        <div className="form-group">
+                            <textarea
+                                value={contactMessage}
+                                onChange={(e) => setContactMessage(e.target.value)}
+                                placeholder="Your message or question"
+                                className="form-textarea"
+                                rows={5}
+                                required
+                            />
                         </div>
-                    </div>
+                        <button type="submit" className="submit-btn" disabled={contactStatus === "loading"}>
+                            {contactStatus === "loading" ? "Sending..." : contactStatus === "success" ? "Sent!" : "Send Message"}
+                        </button>
+                        {contactStatus === "error" && (
+                            <p className="error-message">Failed to send message. Please try again.</p>
+                        )}
+                    </form>
                 </section>
-            </div>
-
-            {/* Endorsements */}
-            <div className="endorsements">
-                <p className="endorsements-text">Used by 1,000+ people from renowned companies</p>
-                <div className="company-logos">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                        <div key={i} className="company-logo">
-                            <div className="logo-placeholder">Logo</div>
-                        </div>
-                    ))}
-                </div>
             </div>
 
             {/* Footer */}
@@ -275,26 +313,23 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                         <h4>Company</h4>
                         <a href="#about">About Us</a>
                         <a href="#team">Our Team</a>
-                    </div>
-                    <div className="footer-column">
-                        <h4>Our Solutions</h4>
-                        <a href="#ai-assistance">AI-Powered Learning</a>
-                        <a href="#optimization">Study Optimization</a>
-                        <a href="#text-generation">Text Generation</a>
-                        <a href="#templates">Customizable Templates</a>
+                        <a href="#careers">Careers</a>
                     </div>
                     <div className="footer-column">
                         <h4>Resources</h4>
                         <a href="#blog">Blog</a>
-                        <a href="#case-studies">Case Studies</a>
-                        <a href="#whitepapers">Whitepapers</a>
-                        <a href="#ebooks">eBooks</a>
+                        <a href="#docs">Documentation</a>
+                        <a href="#support">Support</a>
+                    </div>
+                    <div className="footer-column">
+                        <h4>Legal</h4>
+                        <a href="#privacy">Privacy Policy</a>
+                        <a href="#terms">Terms of Service</a>
+                        <a href="#legal">Legal</a>
                     </div>
                 </div>
                 <div className="footer-bottom">
-                    <a href="#privacy">Privacy Policy</a>
-                    <a href="#legal">Legal</a>
-                    <a href="#terms">Term of Services</a>
+                    <p>&copy; 2024 Lumra. All rights reserved.</p>
                 </div>
             </footer>
         </div>
