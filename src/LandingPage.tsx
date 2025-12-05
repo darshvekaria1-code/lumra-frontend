@@ -501,6 +501,8 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     ])
     const [isChatLoading, setIsChatLoading] = useState(false)
     const [hasAutoConversationStarted, setHasAutoConversationStarted] = useState(false)
+    const [showInfoModal, setShowInfoModal] = useState(false)
+    const [infoModalContent, setInfoModalContent] = useState({ title: "", message: "" })
     const chatEndRef = useRef<HTMLDivElement>(null)
     const aiAssistantSectionRef = useRef<HTMLDivElement>(null)
     const [headerDemoKey, setHeaderDemoKey] = useState("")
@@ -743,6 +745,70 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             }
         }
     }, [hasAutoConversationStarted])
+
+    const handleFooterLinkClick = (link: string, category: string) => {
+        const messages: Record<string, { title: string; message: string }> = {
+            // Product links
+            "Features": {
+                title: "Features",
+                message: "Lumra AI offers personalized learning paths, real-time AI assistance, curriculum-aligned content for IB and IGCSE, progress tracking, interactive quizzes, and comprehensive study materials. Get a demo key to explore all features!"
+            },
+            "Pricing": {
+                title: "Pricing",
+                message: "Contact us for pricing information. We offer flexible plans for students, schools, and institutions. Reach out to discuss your needs and get a customized quote. Email us at darshvekaria1@gmail.com or use the contact form above."
+            },
+            "Security": {
+                title: "Security",
+                message: "Your data security is our priority. We use industry-standard encryption, secure authentication, and comply with data protection regulations. All student information is kept confidential and secure."
+            },
+            "Roadmap": {
+                title: "Roadmap",
+                message: "We're constantly improving Lumra AI! Upcoming features include advanced analytics, mobile apps, offline mode, and expanded curriculum support. Stay tuned for updates by subscribing to our newsletter!"
+            },
+            // Company links
+            "About": {
+                title: "About Lumra",
+                message: "Lumra AI is an innovative learning platform designed for IB and IGCSE students. Founded by Darsh Vekaria and Sidhant Sathe, we're committed to making personalized, AI-powered education accessible to all students."
+            },
+            "Blog": {
+                title: "Blog",
+                message: "Our blog is coming soon! We'll be sharing study tips, learning strategies, curriculum updates, and success stories. Subscribe to our newsletter to be notified when we launch."
+            },
+            "Careers": {
+                title: "Careers",
+                message: "We're growing! If you're passionate about education technology and AI, we'd love to hear from you. Send your resume to darshvekaria1@gmail.com with the subject 'Career Inquiry'."
+            },
+            "Contact": {
+                title: "Contact Us",
+                message: "Have questions? We're here to help! Use the contact form above, email us at darshvekaria1@gmail.com, or request a demo key to get started. We typically respond within 24 hours."
+            },
+            // Legal links
+            "Privacy Policy": {
+                title: "Privacy Policy",
+                message: "We respect your privacy. We collect only necessary information to provide our services, use secure data storage, and never share your data with third parties. For detailed information, please contact us at darshvekaria1@gmail.com."
+            },
+            "Terms of Service": {
+                title: "Terms of Service",
+                message: "By using Lumra AI, you agree to use the platform responsibly and for educational purposes only. We reserve the right to modify these terms. For the complete terms of service, please contact us at darshvekaria1@gmail.com."
+            },
+            "Cookie Policy": {
+                title: "Cookie Policy",
+                message: "We use cookies to enhance your experience, analyze usage, and improve our services. Essential cookies are required for the platform to function. You can manage cookie preferences in your browser settings."
+            },
+            "Compliance": {
+                title: "Compliance",
+                message: "Lumra AI complies with data protection regulations including GDPR and COPPA. We maintain high standards for student data privacy and security. For compliance inquiries, contact us at darshvekaria1@gmail.com."
+            }
+        }
+
+        const content = messages[link] || {
+            title: link,
+            message: "This page is coming soon. For more information, please contact us at darshvekaria1@gmail.com or use the contact form above."
+        }
+
+        setInfoModalContent(content)
+        setShowInfoModal(true)
+    }
 
     const startAutoConversation = async () => {
         // Wait 1 second after section is visible
@@ -1653,7 +1719,14 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     <ul className="space-y-4">
                                         {section.links.map((link) => (
                                             <li key={link}>
-                                                <a href="#" className="text-gray-400 hover:text-gray-200 transition-colors text-sm">
+                                                <a 
+                                                    href="#" 
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        handleFooterLinkClick(link, section.title)
+                                                    }}
+                                                    className="text-gray-400 hover:text-gray-200 transition-colors text-sm cursor-pointer"
+                                                >
                                                     {link}
                                                 </a>
                                             </li>
@@ -1668,16 +1741,76 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 &copy; 2025 Lumra AI. All rights reserved. | Made with care by the Lumra team
                             </p>
                             <div className="flex gap-6 text-xs">
-                                <a href="#" className="text-gray-400 hover:text-gray-200 transition-colors">
+                                <a 
+                                    href="#" 
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        handleFooterLinkClick("Terms and Conditions", "Legal")
+                                    }}
+                                    className="text-gray-400 hover:text-gray-200 transition-colors cursor-pointer"
+                                >
                                     Terms and Conditions
                                 </a>
-                                <a href="#" className="text-gray-400 hover:text-gray-200 transition-colors">
+                                <a 
+                                    href="#" 
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        handleFooterLinkClick("Privacy Policy", "Legal")
+                                    }}
+                                    className="text-gray-400 hover:text-gray-200 transition-colors cursor-pointer"
+                                >
                                     Privacy Policy
                                 </a>
                             </div>
                         </div>
                     </div>
                 </footer>
+
+                {/* Info Modal */}
+                {showInfoModal && (
+                    <div 
+                        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" 
+                        onClick={() => setShowInfoModal(false)}
+                    >
+                        <div 
+                            className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-lg w-full shadow-2xl animate-scale-in" 
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-white">{infoModalContent.title}</h2>
+                                <button
+                                    onClick={() => setShowInfoModal(false)}
+                                    className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-zinc-800 rounded-lg"
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <p className="text-gray-300 leading-relaxed mb-6">{infoModalContent.message}</p>
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => setShowInfoModal(false)}
+                                    className="flex-1 px-6 py-3 rounded-lg font-medium text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 transition-all border border-gray-600"
+                                >
+                                    Close
+                                </button>
+                                {(infoModalContent.title === "Pricing" || infoModalContent.title === "Contact Us" || infoModalContent.title === "Careers") && (
+                                    <button
+                                        onClick={() => {
+                                            setShowInfoModal(false)
+                                            const contactSection = document.getElementById('contact')
+                                            contactSection?.scrollIntoView({ behavior: 'smooth' })
+                                        }}
+                                        className="flex-1 px-6 py-3 rounded-lg font-medium text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 transition-all"
+                                    >
+                                        Contact Us
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
