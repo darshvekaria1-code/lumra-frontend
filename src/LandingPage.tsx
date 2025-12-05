@@ -166,9 +166,24 @@ function RollingBackground() {
 
 // Scroll Section Component
 const ScrollSection = React.forwardRef<HTMLDivElement, { children: React.ReactNode; className?: string; id?: string }>(
-    ({ children, className = "", id }, ref) => {
+    ({ children, className = "", id }, externalRef) => {
         const { ref: scrollRef, isVisible } = useScrollAnimation()
-        const sectionRef = (ref || scrollRef) as React.RefObject<HTMLDivElement>
+        
+        // Merge refs: use external ref if provided, otherwise use scrollRef
+        const sectionRef = React.useCallback((node: HTMLDivElement | null) => {
+            // Set the scrollRef for animation
+            if (scrollRef && 'current' in scrollRef) {
+                (scrollRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+            }
+            // Set the external ref if provided
+            if (externalRef) {
+                if (typeof externalRef === 'function') {
+                    externalRef(node)
+                } else if (externalRef && 'current' in externalRef) {
+                    (externalRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+                }
+            }
+        }, [externalRef, scrollRef])
         
         return (
             <section 
