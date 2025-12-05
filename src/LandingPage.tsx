@@ -866,7 +866,11 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                             <div className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white text-lg bg-gradient-to-br from-gray-600 to-gray-800">
                                 L
                             </div>
-                            <span className="font-bold text-xl text-white group-hover:text-gray-300 transition-colors">Lumra AI</span>
+                            <span className="font-bold text-2xl text-white group-hover:text-gray-300 transition-colors" style={{ 
+                                fontFamily: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                                letterSpacing: '-0.02em',
+                                fontWeight: 700
+                            }}>Lumra</span>
                         </div>
 
                         <div className="hidden md:flex items-center gap-8">
@@ -1029,7 +1033,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 rounded-full opacity-10 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
                                     
                                     <Zap className="w-4 h-4 text-cyan-400 relative z-10" />
-                                    <span className="text-sm tracking-widest text-gray-300 uppercase relative z-10 font-semibold">POWERED BY <span className="text-white">AI</span></span>
+                                    <span className="text-sm tracking-widest text-gray-300 uppercase relative z-10 font-semibold">POWERED BY <span className="text-white">LUMRA AI</span></span>
                                     <Zap className="w-4 h-4 text-cyan-400 relative z-10" />
                                 </div>
 
@@ -1569,7 +1573,11 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     >
                                         L
                                     </div>
-                                    <span className="font-bold text-xl text-white">Lumra AI</span>
+                                    <span className="font-bold text-xl text-white" style={{ 
+                                        fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                                        letterSpacing: '-0.03em',
+                                        fontWeight: 700
+                                    }}>Lumra</span>
                                 </div>
                                 <p className="text-gray-400 text-sm leading-relaxed mb-6">
                                     The easiest way to learn from AI-powered courses. Personalized learning paths for students of all levels.
