@@ -465,6 +465,9 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [email, setEmail] = useState("")
     const [newsletterEmail, setNewsletterEmail] = useState("")
+    const [showDemoModal, setShowDemoModal] = useState(false)
+    const [headerDemoKey, setHeaderDemoKey] = useState("")
+    const [headerDemoKeyError, setHeaderDemoKeyError] = useState("")
 
     const handleDemoKeySubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -494,6 +497,39 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         } catch (error) {
             console.error("Error validating demo key:", error)
             setDemoKeyError("Error validating key. Please try again.")
+        }
+    }
+
+    const handleHeaderDemoKeySubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!headerDemoKey.trim()) {
+            setHeaderDemoKeyError("Please enter a demo key")
+            return
+        }
+
+        setHeaderDemoKeyError("")
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/demo/validate`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ key: headerDemoKey.trim() }),
+            })
+
+            const data = await response.json()
+
+            if (response.ok && data.valid) {
+                localStorage.setItem("lumra_demo_key", headerDemoKey.trim())
+                setShowDemoModal(false)
+                setHeaderDemoKey("")
+                onDemoKeySubmit(headerDemoKey.trim())
+            } else {
+                setHeaderDemoKeyError(data.message || "Invalid demo key")
+            }
+        } catch (error) {
+            console.error("Error validating demo key:", error)
+            setHeaderDemoKeyError("Error validating key. Please try again.")
         }
     }
 
@@ -563,20 +599,8 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
                         <div className="hidden md:flex items-center gap-4">
                             <button 
-                                className="text-gray-400 hover:text-gray-200 transition-colors text-sm"
-                                onClick={() => {
-                                    const demoSection = document.querySelector('.demo-section')
-                                    demoSection?.scrollIntoView({ behavior: 'smooth' })
-                                }}
-                            >
-                                Sign In
-                            </button>
-                            <button 
                                 className="px-6 py-2 rounded-full font-medium text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 active:scale-95 border border-gray-600"
-                                onClick={() => {
-                                    const demoSection = document.querySelector('.demo-section')
-                                    demoSection?.scrollIntoView({ behavior: 'smooth' })
-                                }}
+                                onClick={() => setShowDemoModal(true)}
                             >
                                 Try A Demo
                             </button>
@@ -637,10 +661,14 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
                         <div className="relative max-w-5xl mx-auto text-center">
                             <div className="mb-12 animate-fade-in">
-                                <div className="inline-flex items-center gap-3 mb-8 px-4 py-2 rounded-full border border-gray-700 bg-gray-900/40 backdrop-blur">
-                                    <Zap className="w-4 h-4 text-cyan-400" />
-                                    <span className="text-sm tracking-widest text-gray-400 uppercase">Powered by AI</span>
-                                    <Zap className="w-4 h-4 text-cyan-400" />
+                                <div className="inline-flex items-center gap-3 mb-8 px-4 py-2 rounded-full border border-gray-700 bg-gray-900/40 backdrop-blur relative group">
+                                    {/* Colorful aura effect */}
+                                    <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500 animate-pulse" />
+                                    <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 rounded-full opacity-10 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
+                                    
+                                    <Zap className="w-4 h-4 text-cyan-400 relative z-10" />
+                                    <span className="text-sm tracking-widest text-gray-300 uppercase relative z-10 font-semibold">POWERED BY <span className="text-white">AI</span></span>
+                                    <Zap className="w-4 h-4 text-cyan-400 relative z-10" />
                                 </div>
 
                                 <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-tight">
@@ -972,6 +1000,53 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                         </div>
                     </ScrollSection>
                 </main>
+
+                {/* Demo Key Modal */}
+                {showDemoModal && (
+                    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowDemoModal(false)}>
+                        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-md w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-white">Enter Demo Key</h2>
+                                <button
+                                    onClick={() => {
+                                        setShowDemoModal(false)
+                                        setHeaderDemoKey("")
+                                        setHeaderDemoKeyError("")
+                                    }}
+                                    className="text-gray-400 hover:text-white transition-colors"
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <form onSubmit={handleHeaderDemoKeySubmit}>
+                                <div className="mb-4">
+                                    <input
+                                        type="text"
+                                        value={headerDemoKey}
+                                        onChange={(e) => {
+                                            setHeaderDemoKey(e.target.value)
+                                            setHeaderDemoKeyError("")
+                                        }}
+                                        placeholder="Enter your demo key"
+                                        className="w-full px-6 py-4 rounded-full bg-zinc-800/60 border border-zinc-700 text-white placeholder-gray-500 focus:outline-none focus:border-zinc-600 focus:bg-zinc-800 transition-all"
+                                        autoFocus
+                                    />
+                                </div>
+                                {headerDemoKeyError && (
+                                    <p className="text-red-400 text-sm mb-4">{headerDemoKeyError}</p>
+                                )}
+                                <button
+                                    type="submit"
+                                    className="w-full px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 transition-all transform hover:scale-105 active:scale-95 border border-gray-600"
+                                >
+                                    Validate & Continue
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                )}
 
                 {/* Footer */}
                 <footer className="border-t border-gray-800 bg-black/60 backdrop-blur-md py-16 px-6">
