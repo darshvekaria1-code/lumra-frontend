@@ -11,22 +11,33 @@ function useScrollAnimation() {
     const ref = useRef<HTMLElement>(null)
 
     useEffect(() => {
+        const element = ref.current
+        if (!element) return
+
+        // Use requestAnimationFrame for better performance
         const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true)
-                }
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        // Use requestAnimationFrame to prevent scroll glitches
+                        requestAnimationFrame(() => {
+                            setIsVisible(true)
+                        })
+                    }
+                })
             },
-            { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+            { 
+                threshold: 0.1, 
+                rootMargin: '0px 0px -50px 0px',
+                // Use passive observation for better scroll performance
+            }
         )
 
-        if (ref.current) {
-            observer.observe(ref.current)
-        }
+        observer.observe(element)
 
         return () => {
-            if (ref.current) {
-                observer.unobserve(ref.current)
+            if (element) {
+                observer.unobserve(element)
             }
         }
     }, [])
@@ -959,10 +970,16 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                         e.preventDefault()
                                         if (item.scrollFn) {
                                             item.scrollFn()
-                                        } else {
-                                            const section = document.getElementById(item.id)
-                                            section?.scrollIntoView({ behavior: 'smooth' })
-                                        }
+                                            } else {
+                                                const section = document.getElementById(item.id)
+                                                if (section) {
+                                                    const main = document.querySelector('main')
+                                                    if (main) {
+                                                        const offsetTop = section.offsetTop - 80
+                                                        main.scrollTo({ top: offsetTop, behavior: 'smooth' })
+                                                    }
+                                                }
+                                            }
                                     }}
                                     className="text-gray-400 hover:text-gray-200 transition-colors duration-300 relative group text-sm cursor-pointer"
                                 >
@@ -1063,7 +1080,13 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                                 item.scrollFn()
                                             } else {
                                                 const section = document.getElementById(item.id)
-                                                section?.scrollIntoView({ behavior: 'smooth' })
+                                                if (section) {
+                                                    const main = document.querySelector('main')
+                                                    if (main) {
+                                                        const offsetTop = section.offsetTop - 80
+                                                        main.scrollTo({ top: offsetTop, behavior: 'smooth' })
+                                                    }
+                                                }
                                             }
                                         }}
                                         className="block text-gray-400 hover:text-gray-300 transition-colors"
@@ -1085,7 +1108,11 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     )}
                 </header>
 
-                <main className="flex-1 overflow-y-auto custom-scrollbar relative">
+                <main className="flex-1 overflow-y-auto custom-scrollbar relative" style={{ 
+                    scrollBehavior: 'smooth',
+                    WebkitOverflowScrolling: 'touch',
+                    overscrollBehavior: 'contain'
+                }}>
                     {/* Background for entire main content - seamless across all sections */}
                     <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none z-0">
                         {/* Starfield texture overlay */}
@@ -1127,8 +1154,14 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     <button 
                                         className="px-10 py-3.5 bg-white text-black font-bold rounded-full text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
                                         onClick={() => {
-                                            const demoSection = document.querySelector('.demo-section')
-                                            demoSection?.scrollIntoView({ behavior: 'smooth' })
+                                            const demoSection = document.getElementById('demo-key')
+                                            if (demoSection) {
+                                                const main = document.querySelector('main')
+                                                if (main) {
+                                                    const offsetTop = demoSection.offsetTop - 80
+                                                    main.scrollTo({ top: offsetTop, behavior: 'smooth' })
+                                                }
+                                            }
                                         }}
                                     >
                                         Try A Demo
@@ -1806,7 +1839,13 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                         onClick={() => {
                                             setShowInfoModal(false)
                                             const contactSection = document.getElementById('contact')
-                                            contactSection?.scrollIntoView({ behavior: 'smooth' })
+                                            if (contactSection) {
+                                                const main = document.querySelector('main')
+                                                if (main) {
+                                                    const offsetTop = contactSection.offsetTop - 80
+                                                    main.scrollTo({ top: offsetTop, behavior: 'smooth' })
+                                                }
+                                            }
                                         }}
                                         className="flex-1 px-6 py-3 rounded-lg font-medium text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 transition-all"
                                     >
