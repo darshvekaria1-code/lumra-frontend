@@ -729,7 +729,15 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
     // Scroll chat to bottom when new messages arrive
     useEffect(() => {
-        chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        if (chatEndRef.current) {
+            const chatContainer = chatEndRef.current.closest('.overflow-y-auto')
+            if (chatContainer) {
+                chatContainer.scrollTo({ 
+                    top: chatContainer.scrollHeight, 
+                    behavior: "smooth" 
+                })
+            }
+        }
     }, [chatMessages])
 
     // Auto-conversation when section comes into view
