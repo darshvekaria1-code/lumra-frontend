@@ -739,10 +739,15 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                             <div className="flex items-center gap-4 ml-4 pl-4 border-l border-zinc-800">
                                 <div className="flex items-center justify-center">
                                     <img 
-                                        src="/logos/ib-logo (2).png" 
+                                        src="/logos/ib-logo.png" 
                                         alt="International Baccalaureate" 
-                                        className="h-10 w-10 object-contain"
-                                        style={{ filter: 'brightness(1.2) contrast(1.2)' }}
+                                        className="h-12 w-auto max-w-[60px] object-contain"
+                                        style={{ 
+                                            imageRendering: 'high-quality',
+                                            maxHeight: '48px',
+                                            width: 'auto',
+                                            height: 'auto'
+                                        }}
                                         onError={(e) => {
                                             // Try SVG fallback
                                             e.currentTarget.src = '/logos/ib-logo.svg'
@@ -759,10 +764,15 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 </div>
                                 <div className="flex items-center justify-center">
                                     <img 
-                                        src="/logos/igcse-logo (2).png" 
+                                        src="/logos/igcse-logo.png" 
                                         alt="Cambridge Assessment International Education" 
-                                        className="h-12 w-auto object-contain"
-                                        style={{ filter: 'brightness(1.2) contrast(1.2)' }}
+                                        className="h-12 w-auto max-w-[80px] object-contain"
+                                        style={{ 
+                                            imageRendering: 'high-quality',
+                                            maxHeight: '48px',
+                                            width: 'auto',
+                                            height: 'auto'
+                                        }}
                                         onError={(e) => {
                                             // Try SVG fallback
                                             e.currentTarget.src = '/logos/igcse-logo.svg'
