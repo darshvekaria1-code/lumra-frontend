@@ -470,6 +470,15 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
     const [newsletterError, setNewsletterError] = useState("")
     const [showDemoModal, setShowDemoModal] = useState(false)
+    const [chatInput, setChatInput] = useState("")
+    const [chatMessages, setChatMessages] = useState<Array<{ type: "user" | "ai"; text: string }>>([
+        {
+            type: "ai",
+            text: "Hello! I'm Lumra AI, your personalized learning assistant. What would you like to learn today?",
+        },
+    ])
+    const [isChatLoading, setIsChatLoading] = useState(false)
+    const chatEndRef = useRef<HTMLDivElement>(null)
     const [headerDemoKey, setHeaderDemoKey] = useState("")
     const [headerDemoKeyError, setHeaderDemoKeyError] = useState("")
     const [demoModalTab, setDemoModalTab] = useState<"enter" | "request">("enter")
@@ -678,6 +687,64 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             console.error("Error subscribing to newsletter:", error)
             setNewsletterError("Network error. Please check your connection and try again.")
             setNewsletterStatus("error")
+        }
+    }
+
+    // Scroll chat to bottom when new messages arrive
+    useEffect(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }, [chatMessages])
+
+    const handleChatSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!chatInput.trim() || isChatLoading) return
+
+        const userMessage = chatInput.trim()
+        setChatInput("")
+        setIsChatLoading(true)
+
+        // Add user message
+        setChatMessages((prev) => [...prev, { type: "user", text: userMessage }])
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/chatgpt`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    prompt: userMessage,
+                    system: "You are Lumra AI, a friendly and helpful personalized learning assistant for IB and IGCSE students. Provide clear, concise, and encouraging responses. Help students with their learning goals, answer questions about subjects, and offer study tips. Keep responses under 200 words when possible.",
+                    temperature: 0.7,
+                }),
+            })
+
+            const data = await response.json()
+
+            if (response.ok && data.response) {
+                // Add AI response
+                setChatMessages((prev) => [...prev, { type: "ai", text: data.response }])
+            } else {
+                // Show error message
+                setChatMessages((prev) => [
+                    ...prev,
+                    {
+                        type: "ai",
+                        text: "I'm sorry, I'm having trouble connecting right now. Please try again in a moment, or get a demo key to access the full Lumra AI experience!",
+                    },
+                ])
+            }
+        } catch (error) {
+            console.error("Error sending chat message:", error)
+            setChatMessages((prev) => [
+                ...prev,
+                {
+                    type: "ai",
+                    text: "I'm sorry, I encountered an error. Please check your connection and try again, or get a demo key to access the full Lumra AI experience!",
+                },
+            ])
+        } finally {
+            setIsChatLoading(false)
         }
     }
 
@@ -1091,26 +1158,59 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
                             <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 backdrop-blur-md shadow-2xl overflow-hidden animate-scale-in">
                                 <div className="h-[400px] overflow-y-auto p-8 space-y-6 custom-scrollbar bg-gradient-to-b from-zinc-900/80 to-zinc-950/80">
-                                    <div className="flex justify-start animate-fade-in">
-                                        <div className="max-w-xs sm:max-w-md px-5 py-4 rounded-lg bg-zinc-800/60 text-gray-100 rounded-bl-none border border-zinc-700">
-                                            <p className="text-sm leading-relaxed">
-                                                Hello! I'm Lumra AI, your personalized learning assistant. What would you like to learn today?
-                                            </p>
+                                    {chatMessages.map((msg, idx) => (
+                                        <div
+                                            key={idx}
+                                            className={`flex ${msg.type === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
+                                            style={{ animationDelay: `${idx * 100}ms` }}
+                                        >
+                                            <div
+                                                className={`max-w-xs sm:max-w-md px-5 py-4 rounded-lg text-sm leading-relaxed ${
+                                                    msg.type === "user"
+                                                        ? "bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-br-none border border-gray-600"
+                                                        : "bg-zinc-800/60 text-gray-100 rounded-bl-none border border-zinc-700"
+                                                }`}
+                                            >
+                                                <p>{msg.text}</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    ))}
+                                    {isChatLoading && (
+                                        <div className="flex justify-start animate-fade-in">
+                                            <div className="max-w-xs sm:max-w-md px-5 py-4 rounded-lg bg-zinc-800/60 text-gray-100 rounded-bl-none border border-zinc-700">
+                                                <div className="flex gap-2 items-center">
+                                                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+                                                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+                                                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div ref={chatEndRef} />
                                 </div>
 
                                 <div className="border-t border-zinc-800 p-6 bg-zinc-950/80 backdrop-blur-md">
-                                    <div className="flex gap-3">
+                                    <form onSubmit={handleChatSubmit} className="flex gap-3">
                                         <input
                                             type="text"
+                                            value={chatInput}
+                                            onChange={(e) => setChatInput(e.target.value)}
                                             placeholder="Ask me anything about learning or skills..."
                                             className="flex-1 bg-zinc-900/60 border border-zinc-700 text-white rounded-lg px-5 py-3 placeholder-gray-500 focus:outline-none focus:border-gray-600 focus:bg-zinc-900 transition-all text-sm"
+                                            disabled={isChatLoading}
                                         />
-                                        <button className="px-5 py-3 rounded-lg font-medium text-white transition-all duration-300 transform hover:scale-105 active:scale-95 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 border border-gray-600">
-                                            <Send className="w-5 h-5" />
+                                        <button
+                                            type="submit"
+                                            disabled={isChatLoading || !chatInput.trim()}
+                                            className="px-5 py-3 rounded-lg font-medium text-white transition-all duration-300 transform hover:scale-105 active:scale-95 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                                        >
+                                            {isChatLoading ? (
+                                                <Loader className="w-5 h-5 animate-spin" />
+                                            ) : (
+                                                <Send className="w-5 h-5" />
+                                            )}
                                         </button>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
