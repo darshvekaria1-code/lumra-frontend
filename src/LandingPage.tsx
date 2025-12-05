@@ -606,16 +606,13 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                             </button>
                             
                             {/* IB and IGCSE Logos */}
-                            <div className="flex items-center gap-3 ml-4 pl-4 border-l border-zinc-800">
-                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-sm relative group">
-                                    {/* Colorful aura effect for IB */}
-                                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600 rounded-lg opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500 animate-pulse" />
-                                    <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 rounded-lg opacity-10 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
-                                    
+                            <div className="flex items-center gap-4 ml-4 pl-4 border-l border-zinc-800">
+                                <div className="flex items-center justify-center">
                                     <img 
                                         src="/logos/ib-logo.svg" 
                                         alt="International Baccalaureate" 
-                                        className="w-8 h-8 object-contain relative z-10"
+                                        className="h-10 w-10 object-contain"
+                                        style={{ filter: 'brightness(1.1) contrast(1.1)' }}
                                         onError={(e) => {
                                             // Fallback to text if image fails to load
                                             e.currentTarget.style.display = 'none'
@@ -623,19 +620,16 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                             if (fallback) fallback.style.display = 'flex'
                                         }}
                                     />
-                                    <div className="w-8 h-8 rounded flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 text-white font-bold text-[10px] leading-tight relative z-10 hidden">
+                                    <div className="h-10 w-10 rounded flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 text-white font-bold text-xs hidden">
                                         IB
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-sm relative group">
-                                    {/* Colorful aura effect for IGCSE */}
-                                    <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 rounded-lg opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500 animate-pulse" />
-                                    <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-400 via-red-400 to-orange-500 rounded-lg opacity-10 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
-                                    
+                                <div className="flex items-center justify-center">
                                     <img 
                                         src="/logos/igcse-logo.svg" 
-                                        alt="Cambridge IGCSE" 
-                                        className="w-8 h-8 object-contain relative z-10"
+                                        alt="Cambridge Assessment International Education" 
+                                        className="h-12 w-auto object-contain"
+                                        style={{ filter: 'brightness(1.1) contrast(1.1)' }}
                                         onError={(e) => {
                                             // Fallback to text if image fails to load
                                             e.currentTarget.style.display = 'none'
@@ -643,7 +637,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                             if (fallback) fallback.style.display = 'flex'
                                         }}
                                     />
-                                    <div className="w-8 h-8 rounded flex items-center justify-center bg-gradient-to-br from-orange-600 to-orange-700 text-white font-bold text-[10px] leading-tight relative z-10 hidden">
+                                    <div className="h-10 w-10 rounded flex items-center justify-center bg-gradient-to-br from-orange-600 to-orange-700 text-white font-bold text-xs hidden">
                                         IGCSE
                                     </div>
                                 </div>
