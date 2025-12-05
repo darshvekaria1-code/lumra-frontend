@@ -1590,16 +1590,22 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 {/* Founders Section with Glow Effect */}
                                 <div className="mb-6">
                                     <p className="text-gray-500 text-xs uppercase tracking-wider mb-3">Founders</p>
-                                    <div className="space-y-2">
+                                    <div className="flex flex-wrap gap-3">
                                         <div className="relative inline-block group">
-                                            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-lg opacity-20 group-hover:opacity-40 blur-sm transition-opacity duration-300"></div>
-                                            <p className="relative text-white text-sm font-medium px-3 py-1.5 rounded-lg bg-zinc-900/50 border border-zinc-800/50">
+                                            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-lg opacity-30 group-hover:opacity-60 blur-md transition-opacity duration-300 animate-pulse"></div>
+                                            <p className="relative text-white text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-zinc-900/80 to-zinc-800/80 border border-purple-500/30 backdrop-blur-sm" style={{
+                                                textShadow: '0 0 10px rgba(139, 92, 246, 0.5)',
+                                                boxShadow: '0 0 15px rgba(139, 92, 246, 0.3), inset 0 0 15px rgba(139, 92, 246, 0.1)'
+                                            }}>
                                                 Darsh Vekaria
                                             </p>
                                         </div>
-                                        <div className="relative inline-block group ml-2">
-                                            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-lg opacity-20 group-hover:opacity-40 blur-sm transition-opacity duration-300"></div>
-                                            <p className="relative text-white text-sm font-medium px-3 py-1.5 rounded-lg bg-zinc-900/50 border border-zinc-800/50">
+                                        <div className="relative inline-block group">
+                                            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-lg opacity-30 group-hover:opacity-60 blur-md transition-opacity duration-300 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                                            <p className="relative text-white text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-zinc-900/80 to-zinc-800/80 border border-purple-500/30 backdrop-blur-sm" style={{
+                                                textShadow: '0 0 10px rgba(139, 92, 246, 0.5)',
+                                                boxShadow: '0 0 15px rgba(139, 92, 246, 0.3), inset 0 0 15px rgba(139, 92, 246, 0.1)'
+                                            }}>
                                                 Sidhant Sathe
                                             </p>
                                         </div>
