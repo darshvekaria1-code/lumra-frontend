@@ -1371,24 +1371,19 @@ export function App() {
         resetResponse()
     }
 
-    // Show landing page if no demo key and not logged in
-    // Always show landing page first if user is not logged in
-    if (!isLoggedIn) {
-        // If they have a valid demo key, they can proceed to login
-        // Otherwise show landing page
-        if (!hasValidDemoKey) {
-            return (
-                <LandingPage 
-                    onDemoKeySubmit={(key) => {
-                        setHasValidDemoKey(true)
-                        localStorage.setItem("lumra_demo_key", key)
-                    }}
-                />
-            )
-        }
+    // PRIORITY 1: Show landing page if user is NOT logged in AND has NO valid demo key
+    if (!isLoggedIn && !hasValidDemoKey) {
+        return (
+            <LandingPage 
+                onDemoKeySubmit={(key) => {
+                    setHasValidDemoKey(true)
+                    localStorage.setItem("lumra_demo_key", key)
+                }}
+            />
+        )
     }
 
-    // Show login/sign up page if not logged in but has valid demo key
+    // PRIORITY 2: Show login/sign up page if user is NOT logged in BUT has valid demo key
     if (!isLoggedIn && hasValidDemoKey) {
     return (
             <div className="lumra-login-container">
