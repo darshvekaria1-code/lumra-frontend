@@ -739,7 +739,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                             <div className="flex items-center gap-4 ml-4 pl-4 border-l border-zinc-800">
                                 <div className="flex items-center justify-center">
                                     <img 
-                                        src="/logos/ib-logo.png" 
+                                        src="/logos/ib-logo (2).png" 
                                         alt="International Baccalaureate" 
                                         className="h-10 w-10 object-contain"
                                         style={{ filter: 'brightness(1.2) contrast(1.2)' }}
@@ -759,7 +759,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 </div>
                                 <div className="flex items-center justify-center">
                                     <img 
-                                        src="/logos/igcse-logo.png" 
+                                        src="/logos/igcse-logo (2).png" 
                                         alt="Cambridge Assessment International Education" 
                                         className="h-12 w-auto object-contain"
                                         style={{ filter: 'brightness(1.2) contrast(1.2)' }}
