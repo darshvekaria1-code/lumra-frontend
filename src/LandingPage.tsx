@@ -467,6 +467,8 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [email, setEmail] = useState("")
     const [newsletterEmail, setNewsletterEmail] = useState("")
+    const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+    const [newsletterError, setNewsletterError] = useState("")
     const [showDemoModal, setShowDemoModal] = useState(false)
     const [headerDemoKey, setHeaderDemoKey] = useState("")
     const [headerDemoKeyError, setHeaderDemoKeyError] = useState("")
@@ -632,11 +634,50 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 setContactMessage("")
                 setTimeout(() => setContactStatus("idle"), 3000)
             } else {
+                const data = await response.json()
                 setContactStatus("error")
             }
         } catch (error) {
             console.error("Error submitting contact form:", error)
             setContactStatus("error")
+        }
+    }
+
+    const handleNewsletterSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!newsletterEmail) {
+            setNewsletterError("Please enter your email address")
+            setNewsletterStatus("error")
+            return
+        }
+
+        setNewsletterStatus("loading")
+        setNewsletterError("")
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/newsletter/subscribe`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: newsletterEmail,
+                }),
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                setNewsletterStatus("success")
+                setNewsletterEmail("")
+                setTimeout(() => setNewsletterStatus("idle"), 5000)
+            } else {
+                setNewsletterError(data.error || "Failed to subscribe. Please try again.")
+                setNewsletterStatus("error")
+            }
+        } catch (error) {
+            console.error("Error subscribing to newsletter:", error)
+            setNewsletterError("Network error. Please check your connection and try again.")
+            setNewsletterStatus("error")
         }
     }
 
@@ -1079,19 +1120,34 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                         Get weekly updates on new courses, learning tips, industry insights, and exclusive resources.
                                     </p>
 
-                                    <form onSubmit={(e) => { e.preventDefault(); setNewsletterEmail("") }} className="flex flex-col sm:flex-row gap-3 mb-8">
+                                    <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 mb-8">
                                         <input
                                             type="email"
                                             placeholder="your@email.com"
                                             value={newsletterEmail}
-                                            onChange={(e) => setNewsletterEmail(e.target.value)}
+                                            onChange={(e) => {
+                                                setNewsletterEmail(e.target.value)
+                                                setNewsletterError("")
+                                            }}
                                             className="flex-1 px-6 py-4 rounded-full bg-zinc-900/60 border border-zinc-800 text-white placeholder-gray-500 focus:outline-none focus:border-zinc-700 focus:bg-zinc-900 transition-all text-sm"
+                                            required
+                                            disabled={newsletterStatus === "loading"}
                                         />
-                                        <button className="px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 transition-all transform hover:scale-105 active:scale-95 border border-gray-600 flex items-center justify-center gap-2 whitespace-nowrap">
-                                            <span>Subscribe</span>
-                                            <Send className="w-4 h-4" />
+                                        <button 
+                                            type="submit"
+                                            disabled={newsletterStatus === "loading"}
+                                            className="px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 transition-all transform hover:scale-105 active:scale-95 border border-gray-600 flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {newsletterStatus === "loading" ? "Subscribing..." : newsletterStatus === "success" ? "Subscribed!" : "Subscribe"}
+                                            {newsletterStatus !== "loading" && <Send className="w-4 h-4" />}
                                         </button>
                                     </form>
+                                    {newsletterError && (
+                                        <p className="text-red-400 text-sm mb-4">{newsletterError}</p>
+                                    )}
+                                    {newsletterStatus === "success" && (
+                                        <p className="text-green-400 text-sm mb-4">Thank you for subscribing! Check your email for updates.</p>
+                                    )}
                                 </div>
 
                                 <div className="animate-slide-up animation-delay-200">
