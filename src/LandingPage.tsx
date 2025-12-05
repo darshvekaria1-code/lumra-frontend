@@ -169,17 +169,20 @@ const ScrollSection = React.forwardRef<HTMLDivElement, { children: React.ReactNo
     ({ children, className = "", id }, externalRef) => {
         const { ref: scrollRef, isVisible } = useScrollAnimation()
         
-        // Merge refs: use external ref if provided, otherwise use scrollRef
-        const sectionRef = React.useCallback((node: HTMLDivElement | null) => {
-            // Set the scrollRef for animation
-            if (scrollRef && 'current' in scrollRef) {
+        // Use a callback ref to set both refs
+        const setRefs = React.useCallback((node: HTMLDivElement | null) => {
+            // Set scrollRef for animation
+            if (typeof scrollRef === 'function') {
+                scrollRef(node)
+            } else if (scrollRef) {
                 (scrollRef as React.MutableRefObject<HTMLDivElement | null>).current = node
             }
-            // Set the external ref if provided
+            
+            // Set external ref if provided
             if (externalRef) {
                 if (typeof externalRef === 'function') {
                     externalRef(node)
-                } else if (externalRef && 'current' in externalRef) {
+                } else if (externalRef) {
                     (externalRef as React.MutableRefObject<HTMLDivElement | null>).current = node
                 }
             }
@@ -188,7 +191,7 @@ const ScrollSection = React.forwardRef<HTMLDivElement, { children: React.ReactNo
         return (
             <section 
                 id={id}
-                ref={sectionRef}
+                ref={setRefs}
                 className={`${className} ${isVisible ? 'scroll-animate-in' : 'scroll-animate-out'}`}
             >
                 {children}
