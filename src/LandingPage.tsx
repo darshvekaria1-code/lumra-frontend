@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { 
   ArrowRight, Zap, BookOpen, Brain, Target, Rocket, Code2, 
   MessageCircle, Send, Loader, Mail, Github, Linkedin, Twitter 
