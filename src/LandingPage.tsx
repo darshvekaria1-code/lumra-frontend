@@ -613,7 +613,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 rounded-lg opacity-10 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
                                     
                                     <img 
-                                        src="/logos/ib-logo.png" 
+                                        src="/logos/ib-logo.svg" 
                                         alt="International Baccalaureate" 
                                         className="w-8 h-8 object-contain relative z-10"
                                         onError={(e) => {
@@ -633,7 +633,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-400 via-red-400 to-orange-500 rounded-lg opacity-10 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
                                     
                                     <img 
-                                        src="/logos/igcse-logo.png" 
+                                        src="/logos/igcse-logo.svg" 
                                         alt="Cambridge IGCSE" 
                                         className="w-8 h-8 object-contain relative z-10"
                                         onError={(e) => {

@@ -1,0 +1,20 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ibGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E88E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1565C0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Blue circle background -->
+  <circle cx="32" cy="32" r="30" fill="url(#ibGradient)" stroke="#0D47A1" stroke-width="1"/>
+  <!-- Highlight effect on upper right -->
+  <ellipse cx="38" cy="26" rx="12" ry="8" fill="rgba(255,255,255,0.2)"/>
+  <!-- Lowercase 'ib' text -->
+  <text x="32" y="42" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">
+    <tspan x="32" y="42" font-family="Arial, sans-serif" font-size="20">i</tspan>
+    <tspan x="32" y="42" dx="8" font-family="Georgia, serif" font-size="24">b</tspan>
+  </text>
+  <!-- Dot above 'i' -->
+  <circle cx="24" cy="28" r="2" fill="white"/>
+</svg>
+
