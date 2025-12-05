@@ -513,12 +513,61 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [requestStatus, setRequestStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
     const [requestError, setRequestError] = useState("")
 
-    // Scroll to top when landing page loads
+    // Scroll to top when landing page loads - run multiple times to ensure it sticks
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' })
+        // Prevent any scrolling during initial load
+        const preventScroll = (e: Event) => {
+            if (window.scrollY > 0) {
+                e.preventDefault()
+                window.scrollTo(0, 0)
+            }
+        }
+        
+        // Immediate scroll to top
+        window.scrollTo(0, 0)
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+        
         // Also clear any hash from URL
         if (window.location.hash) {
             window.history.replaceState(null, '', window.location.pathname)
+        }
+        
+        // Add scroll prevention temporarily
+        window.addEventListener('scroll', preventScroll, { passive: false })
+        window.addEventListener('wheel', preventScroll, { passive: false })
+        
+        // Force scroll to top multiple times
+        const timeouts = [
+            setTimeout(() => {
+                window.scrollTo(0, 0)
+                document.documentElement.scrollTop = 0
+                document.body.scrollTop = 0
+            }, 50),
+            setTimeout(() => {
+                window.scrollTo(0, 0)
+                document.documentElement.scrollTop = 0
+                document.body.scrollTop = 0
+            }, 100),
+            setTimeout(() => {
+                window.scrollTo(0, 0)
+                document.documentElement.scrollTop = 0
+                document.body.scrollTop = 0
+            }, 300),
+            setTimeout(() => {
+                window.scrollTo(0, 0)
+                document.documentElement.scrollTop = 0
+                document.body.scrollTop = 0
+                // Remove scroll prevention after content loads
+                window.removeEventListener('scroll', preventScroll)
+                window.removeEventListener('wheel', preventScroll)
+            }, 1000)
+        ]
+        
+        return () => {
+            timeouts.forEach(clearTimeout)
+            window.removeEventListener('scroll', preventScroll)
+            window.removeEventListener('wheel', preventScroll)
         }
     }, [])
 
@@ -727,11 +776,24 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
     // Scroll chat to bottom when new messages arrive (only within chat container, not page)
     useEffect(() => {
-        // Only scroll if chat container is visible and user is interacting with it
-        if (chatEndRef.current && aiAssistantSectionRef.current) {
-            const chatContainer = chatEndRef.current.closest('.chat-container') || aiAssistantSectionRef.current
-            if (chatContainer) {
-                chatEndRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
+        // Only scroll within the chat container, never scroll the page
+        if (chatEndRef.current) {
+            // Find the scrollable chat container parent
+            let scrollableParent = chatEndRef.current.parentElement
+            while (scrollableParent && !scrollableParent.classList.contains('chat-messages-container')) {
+                scrollableParent = scrollableParent.parentElement
+            }
+            
+            // Only scroll if we found a chat container and it's the scrollable parent
+            if (scrollableParent && scrollableParent.classList.contains('chat-messages-container')) {
+                // Scroll only the container, not the page
+                scrollableParent.scrollTop = scrollableParent.scrollHeight
+            } else if (chatEndRef.current.parentElement) {
+                // Fallback: scroll only the immediate parent element
+                const parent = chatEndRef.current.parentElement
+                if (parent.scrollHeight > parent.clientHeight) {
+                    parent.scrollTop = parent.scrollHeight
+                }
             }
         }
     }, [chatMessages])
@@ -934,12 +996,12 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     }
 
     return (
-        <div className="flex min-h-screen bg-zinc-950 relative">
+        <div className="flex min-h-screen bg-zinc-950 relative landing-page-container">
             <RollingBackground />
             <LeftBar />
 
             {/* Main Content - Scrollable */}
-            <div className="flex-1 flex flex-col overflow-hidden relative z-10">
+            <div className="flex-1 flex flex-col overflow-hidden relative z-10" id="landing-main-content">
                 {/* Header */}
                 <header className="border-b border-zinc-800/50 backdrop-blur-md bg-zinc-950/80 sticky top-0 z-50">
                     <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">

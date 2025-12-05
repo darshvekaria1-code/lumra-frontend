@@ -87,49 +87,12 @@
   opacity: 0;
   transform: translateY(60px);
   transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: opacity, transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 .scroll-animate-in {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: opacity, transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
-  height: 100%;
-  overflow: hidden;
-}
-
-#root {
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* Prevent scroll glitches */
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-main {
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 @keyframes float {
@@ -190,4 +153,19 @@ main {
 /* Demo section styling */
 .demo-section {
   scroll-margin-top: 80px;
+}
+
+/* Prevent unwanted scrolling on page load */
+html {
+  scroll-behavior: auto !important;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Ensure landing page starts at top */
+.landing-page-container {
+  scroll-behavior: auto;
+}
 }
