@@ -325,7 +325,12 @@ export function App() {
     const [hasValidDemoKey, setHasValidDemoKey] = useState<boolean>(() => {
         // Check if user has a valid demo key stored (only accept "11223344")
         const storedKey = localStorage.getItem("lumra_demo_key")
-        return storedKey === "11223344"
+        const isValid = storedKey === "11223344"
+        // Clean up invalid demo keys
+        if (storedKey && !isValid) {
+            localStorage.removeItem("lumra_demo_key")
+        }
+        return isValid
     })
     const [showSignUp, setShowSignUp] = useState(false)
     
@@ -1339,19 +1344,24 @@ export function App() {
     }
 
     // Show landing page if no demo key and not logged in
-    if (!isLoggedIn && !hasValidDemoKey) {
-        return (
-            <LandingPage 
-                onDemoKeySubmit={(key) => {
-                    setHasValidDemoKey(true)
-                    localStorage.setItem("lumra_demo_key", key)
-                }}
-            />
-        )
+    // Always show landing page first if user is not logged in
+    if (!isLoggedIn) {
+        // If they have a valid demo key, they can proceed to login
+        // Otherwise show landing page
+        if (!hasValidDemoKey) {
+            return (
+                <LandingPage 
+                    onDemoKeySubmit={(key) => {
+                        setHasValidDemoKey(true)
+                        localStorage.setItem("lumra_demo_key", key)
+                    }}
+                />
+            )
+        }
     }
 
-    // Show login/sign up page if not logged in but has demo key
-    if (!isLoggedIn) {
+    // Show login/sign up page if not logged in but has valid demo key
+    if (!isLoggedIn && hasValidDemoKey) {
     return (
             <div className="lumra-login-container">
                 <div className="lumra-login-card">
