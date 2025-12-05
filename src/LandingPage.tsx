@@ -867,9 +867,13 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                 L
                             </div>
                             <span className="font-bold text-2xl text-white group-hover:text-gray-300 transition-colors" style={{ 
-                                fontFamily: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-                                letterSpacing: '-0.02em',
-                                fontWeight: 700
+                                fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                                letterSpacing: '-0.03em',
+                                fontWeight: 700,
+                                background: 'linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                backgroundClip: 'text'
                             }}>Lumra</span>
                         </div>
 
