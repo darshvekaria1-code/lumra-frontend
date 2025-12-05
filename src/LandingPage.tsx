@@ -556,6 +556,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         setRequestStatus("loading")
         
         try {
+            // Add timeout to prevent hanging
+            const controller = new AbortController()
+            const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+
             const response = await fetch(`${API_BASE_URL}/api/demo/request`, {
                 method: "POST",
                 headers: {
@@ -565,7 +569,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     name: requestName.trim(),
                     email: requestEmail.trim(),
                 }),
+                signal: controller.signal
             })
+
+            clearTimeout(timeoutId)
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ message: "Server error" }))
@@ -589,7 +596,11 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         } catch (error) {
             console.error("Error requesting demo key:", error)
             setRequestStatus("error")
-            setRequestError(error instanceof Error ? error.message : "Error submitting request. Please try again.")
+            if (error instanceof Error && error.name === 'AbortError') {
+                setRequestError("Request timed out. Please check your connection and try again.")
+            } else {
+                setRequestError(error instanceof Error ? error.message : "Error submitting request. Please try again.")
+            }
         }
     }
 
