@@ -165,11 +165,12 @@ function RollingBackground() {
 }
 
 // Scroll Section Component
-function ScrollSection({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function ScrollSection({ children, className = "", id }: { children: React.ReactNode; className?: string; id?: string }) {
     const { ref, isVisible } = useScrollAnimation()
     
     return (
         <section 
+            id={id}
             ref={ref as React.RefObject<HTMLDivElement>}
             className={`${className} ${isVisible ? 'scroll-animate-in' : 'scroll-animate-out'}`}
         >
@@ -656,16 +657,29 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                         </div>
 
                         <div className="hidden md:flex items-center gap-8">
-                            {["Features", "Pricing", "Resources", "Community"].map((item) => (
-                                <a
-                                    key={item}
-                                    href={`#${item.toLowerCase()}`}
-                                    className="text-gray-400 hover:text-gray-200 transition-colors duration-300 relative group text-sm"
-                                >
-                                    {item}
-                                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-500 group-hover:w-full transition-all duration-300" />
-                                </a>
-                            ))}
+                            <a
+                                href="#home"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                                }}
+                                className="text-gray-400 hover:text-gray-200 transition-colors duration-300 relative group text-sm cursor-pointer"
+                            >
+                                Home
+                                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-500 group-hover:w-full transition-all duration-300" />
+                            </a>
+                            <a
+                                href="#demo-key"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    const demoSection = document.getElementById('demo-key')
+                                    demoSection?.scrollIntoView({ behavior: 'smooth' })
+                                }}
+                                className="text-gray-400 hover:text-gray-200 transition-colors duration-300 relative group text-sm cursor-pointer"
+                            >
+                                Demo Key
+                                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-500 group-hover:w-full transition-all duration-300" />
+                            </a>
                         </div>
 
                         <div className="hidden md:flex items-center gap-4">
@@ -731,16 +745,36 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     {isOpen && (
                         <div className="md:hidden border-t border-zinc-800/50 bg-zinc-950/80 backdrop-blur-md animate-slide-down">
                             <div className="px-6 py-4 space-y-4">
-                                {["Features", "Pricing", "Resources", "Community"].map((item) => (
-                                    <a
-                                        key={item}
-                                        href={`#${item.toLowerCase()}`}
-                                        className="block text-gray-400 hover:text-gray-300 transition-colors"
-                                    >
-                                        {item}
-                                    </a>
-                                ))}
-                                <button className="w-full px-6 py-2 rounded-full font-medium text-white bg-gradient-to-r from-gray-700 to-gray-800 transition-all border border-gray-600">
+                                <a
+                                    href="#home"
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        setIsOpen(false)
+                                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                                    }}
+                                    className="block text-gray-400 hover:text-gray-300 transition-colors"
+                                >
+                                    Home
+                                </a>
+                                <a
+                                    href="#demo-key"
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        setIsOpen(false)
+                                        const demoSection = document.getElementById('demo-key')
+                                        demoSection?.scrollIntoView({ behavior: 'smooth' })
+                                    }}
+                                    className="block text-gray-400 hover:text-gray-300 transition-colors"
+                                >
+                                    Demo Key
+                                </a>
+                                <button 
+                                    className="w-full px-6 py-2 rounded-full font-medium text-white bg-gradient-to-r from-gray-700 to-gray-800 transition-all border border-gray-600"
+                                    onClick={() => {
+                                        setIsOpen(false)
+                                        setShowDemoModal(true)
+                                    }}
+                                >
                                     Try A Demo
                                 </button>
                             </div>
@@ -756,7 +790,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </div>
                     
                     {/* Welcome Section */}
-                    <ScrollSection className="relative py-32 px-6 overflow-hidden min-h-screen flex items-center justify-center z-10">
+                    <ScrollSection id="home" className="relative py-32 px-6 overflow-hidden min-h-screen flex items-center justify-center z-10">
 
                         <div className="relative max-w-5xl mx-auto text-center">
                             <div className="mb-12 animate-fade-in">
@@ -827,7 +861,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     </ScrollSection>
 
                     {/* Demo Key Section */}
-                    <ScrollSection className="demo-section py-32 px-6 relative overflow-hidden z-10">
+                    <ScrollSection id="demo-key" className="demo-section py-32 px-6 relative overflow-hidden z-10">
                         <div className="relative max-w-5xl mx-auto text-center">
                             <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">Get Started with Your Demo Key</h2>
                             <p className="text-gray-400 mb-12 text-lg max-w-2xl mx-auto">
