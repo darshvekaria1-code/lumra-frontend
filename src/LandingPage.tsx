@@ -567,9 +567,14 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 }),
             })
 
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: "Server error" }))
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`)
+            }
+
             const data = await response.json()
 
-            if (response.ok) {
+            if (data.success) {
                 setRequestStatus("success")
                 setRequestName("")
                 setRequestEmail("")
@@ -584,7 +589,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         } catch (error) {
             console.error("Error requesting demo key:", error)
             setRequestStatus("error")
-            setRequestError("Error submitting request. Please try again.")
+            setRequestError(error instanceof Error ? error.message : "Error submitting request. Please try again.")
         }
     }
 
