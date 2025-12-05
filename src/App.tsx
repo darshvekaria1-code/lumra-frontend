@@ -374,6 +374,13 @@ export function App() {
     const [showWelcomeAnimation, setShowWelcomeAnimation] = useState(false)
     const [showAIAnimation, setShowAIAnimation] = useState(false)
 
+    // Disable browser scroll restoration to prevent auto-scroll to previous position
+    useEffect(() => {
+        if ('scrollRestoration' in window.history) {
+            window.history.scrollRestoration = 'manual'
+        }
+    }, [])
+
     // Clean up on initial load - ensure landing page shows for new visitors
     useEffect(() => {
         // Force check login state on mount
