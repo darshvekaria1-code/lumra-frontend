@@ -374,10 +374,10 @@ export function App() {
     const [showWelcomeAnimation, setShowWelcomeAnimation] = useState(false)
     const [showAIAnimation, setShowAIAnimation] = useState(false)
 
-    // Set scroll restoration to manual (but allow user scrolling)
+    // Set scroll restoration to auto (let browser handle it naturally)
     useEffect(() => {
         if ('scrollRestoration' in window.history) {
-            window.history.scrollRestoration = 'manual'
+            window.history.scrollRestoration = 'auto'
         }
     }, [])
 

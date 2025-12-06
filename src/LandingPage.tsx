@@ -497,14 +497,34 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [requestStatus, setRequestStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
     const [requestError, setRequestError] = useState("")
 
-    // Simple scroll to top when landing page loads (one time only, no blocking)
+    // Only scroll to top on initial page load (not on every render or touch)
     useEffect(() => {
-        // Scroll to top once on initial load
-        window.scrollTo({ top: 0, behavior: 'instant' })
+        // Only scroll to top if we're at the very top or if there's a hash
+        // Don't interfere with user scrolling
+        const hasScrolled = sessionStorage.getItem('landing_page_has_scrolled') === 'true'
+        const hasHash = window.location.hash
+        
+        if (!hasScrolled && !hasHash) {
+            // Only scroll to top if user hasn't scrolled yet and no hash
+            window.scrollTo({ top: 0, behavior: 'instant' })
+        }
         
         // Clear any hash from URL
-        if (window.location.hash) {
+        if (hasHash) {
             window.history.replaceState(null, '', window.location.pathname)
+        }
+        
+        // Track user scroll to prevent auto-scroll after they've scrolled
+        const handleScroll = () => {
+            if (window.scrollY > 10) {
+                sessionStorage.setItem('landing_page_has_scrolled', 'true')
+            }
+        }
+        
+        window.addEventListener('scroll', handleScroll, { passive: true })
+        
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
         }
     }, [])
 
@@ -745,9 +765,13 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
+                    // Only trigger if section is intersecting AND user has scrolled AND conversation hasn't started
                     if (entry.isIntersecting && !hasAutoConversationStarted && hasUserScrolled()) {
                         setHasAutoConversationStarted(true)
-                        startAutoConversation()
+                        // Use setTimeout to avoid blocking scroll
+                        setTimeout(() => {
+                            startAutoConversation()
+                        }, 100)
                     }
                 })
             },
