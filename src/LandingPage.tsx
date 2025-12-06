@@ -56,6 +56,100 @@ type LandingPageProps = {
     onDemoKeySubmit: (key: string) => void
 }
 
+// Logo Component with animated gradient L
+function Logo({ size = 40 }: { size?: number }) {
+    return (
+        <div className="relative flex items-center gap-3">
+            <svg
+                width={size}
+                height={size}
+                viewBox="0 0 100 100"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="relative"
+            >
+                {/* Glow effect layers */}
+                <defs>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style={{ stopColor: '#a855f7', stopOpacity: 1 }} />
+                        <stop offset="50%" style={{ stopColor: '#ec4899', stopOpacity: 1 }} />
+                        <stop offset="100%" style={{ stopColor: '#06b6d4', stopOpacity: 1 }} />
+                    </linearGradient>
+                </defs>
+                
+                {/* Outer glow aura */}
+                <rect
+                    x="25"
+                    y="20"
+                    width="12"
+                    height="60"
+                    rx="2"
+                    fill="url(#gradient1)"
+                    opacity="0.3"
+                    filter="url(#glow)"
+                    className="animate-pulse"
+                />
+                <rect
+                    x="25"
+                    y="68"
+                    width="38"
+                    height="12"
+                    rx="2"
+                    fill="url(#gradient1)"
+                    opacity="0.3"
+                    filter="url(#glow)"
+                    className="animate-pulse"
+                />
+                
+                {/* Main L shape with gradient */}
+                <rect
+                    x="25"
+                    y="20"
+                    width="12"
+                    height="60"
+                    rx="2"
+                    fill="url(#gradient1)"
+                    filter="url(#glow)"
+                />
+                <rect
+                    x="25"
+                    y="68"
+                    width="38"
+                    height="12"
+                    rx="2"
+                    fill="url(#gradient1)"
+                    filter="url(#glow)"
+                />
+                
+                {/* Inner highlight */}
+                <rect
+                    x="27"
+                    y="22"
+                    width="8"
+                    height="20"
+                    rx="1"
+                    fill="white"
+                    opacity="0.4"
+                />
+            </svg>
+            
+            {/* Lumra text with glow */}
+            <div className="relative">
+                <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+                    Lumra
+                </span>
+            </div>
+        </div>
+    )
+}
+
 // Rolling Background Component
 function RollingBackground() {
     const containerRef = useRef<HTMLDivElement>(null)
@@ -977,18 +1071,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 <header className="border-b border-zinc-800/50 backdrop-blur-md bg-zinc-950/80 sticky top-0 z-50">
                     <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                         <div className="flex items-center gap-3 group cursor-pointer">
-                            <div className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white text-lg bg-gradient-to-br from-gray-600 to-gray-800">
-                                L
-                            </div>
-                            <span className="font-bold text-2xl text-white group-hover:text-gray-300 transition-colors" style={{ 
-                                fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-                                letterSpacing: '-0.03em',
-                                fontWeight: 700,
-                                background: 'linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                backgroundClip: 'text'
-                            }}>Lumra</span>
+                            <Logo size={40} />
                         </div>
 
                         <div className="hidden md:flex items-center gap-8">
