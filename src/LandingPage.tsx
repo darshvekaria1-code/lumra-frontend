@@ -911,7 +911,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             // Company links
             "About": {
                 title: "About Lumra",
-                message: "Lumra AI is an innovative learning platform designed for IB and IGCSE students. Founded by Darsh Vekaria and Sidhant Sathe, we're committed to making personalized, AI-powered education accessible to all students."
+                message: "Lumra AI is an innovative learning platform designed for IB and IGCSE students. Founded by Darsh Vekaria and Siddhant Sathe, we're committed to making personalized, AI-powered education accessible to all students."
             },
             "Blog": {
                 title: "Blog",
@@ -1809,7 +1809,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                                 textShadow: '0 0 10px rgba(139, 92, 246, 0.5)',
                                                 boxShadow: '0 0 15px rgba(139, 92, 246, 0.3), inset 0 0 15px rgba(139, 92, 246, 0.1)'
                                             }}>
-                                                Sidhant Sathe
+                                                Siddhant Sathe
                                             </p>
                                         </div>
                                     </div>
