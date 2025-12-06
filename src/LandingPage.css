@@ -155,7 +155,30 @@
   scroll-margin-top: 80px;
 }
 
-/* Basic scroll styling */
+/* Basic scroll styling - Fix for iPad/iPhone touch scrolling */
+html {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overflow-x: hidden;
+}
+
 body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+}
+
+/* Ensure landing page container allows touch scrolling */
+.landing-page-container {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
+
+/* Main content area - allow touch scrolling */
+#landing-main-content {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
 }

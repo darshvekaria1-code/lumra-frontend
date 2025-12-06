@@ -947,11 +947,11 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     }
 
     return (
-        <div className="min-h-screen bg-zinc-950 relative landing-page-container">
+        <div className="min-h-screen bg-zinc-950 relative landing-page-container" style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}>
             <RollingBackground />
 
             {/* Main Content - Scrollable */}
-            <div className="flex flex-col relative z-10" id="landing-main-content">
+            <div className="flex flex-col relative z-10" id="landing-main-content" style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}>
                 {/* Header */}
                 <header className="border-b border-zinc-800/50 backdrop-blur-md bg-zinc-950/80 sticky top-0 z-50">
                     <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
