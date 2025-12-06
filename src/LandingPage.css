@@ -155,16 +155,7 @@
   scroll-margin-top: 80px;
 }
 
-/* Prevent unwanted scrolling on page load */
-html {
-  scroll-behavior: auto !important;
-}
-
+/* Basic scroll styling */
 body {
   overflow-x: hidden;
-}
-
-/* Ensure landing page starts at top */
-.landing-page-container {
-  scroll-behavior: auto;
 }

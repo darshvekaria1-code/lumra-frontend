@@ -374,7 +374,7 @@ export function App() {
     const [showWelcomeAnimation, setShowWelcomeAnimation] = useState(false)
     const [showAIAnimation, setShowAIAnimation] = useState(false)
 
-    // Disable browser scroll restoration to prevent auto-scroll to previous position
+    // Set scroll restoration to manual (but allow user scrolling)
     useEffect(() => {
         if ('scrollRestoration' in window.history) {
             window.history.scrollRestoration = 'manual'

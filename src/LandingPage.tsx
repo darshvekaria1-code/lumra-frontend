@@ -513,72 +513,14 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [requestStatus, setRequestStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
     const [requestError, setRequestError] = useState("")
 
-    // Scroll to top when landing page loads - prevent ALL scrolling for first 2 seconds
+    // Simple scroll to top when landing page loads (one time only, no blocking)
     useEffect(() => {
-        let isInitialLoad = true
-        let scrollPreventionActive = true
+        // Scroll to top once on initial load
+        window.scrollTo({ top: 0, behavior: 'instant' })
         
-        // Aggressive scroll prevention
-        const preventAllScroll = (e: Event) => {
-            if (scrollPreventionActive && window.scrollY > 10) {
-                e.preventDefault()
-                e.stopPropagation()
-                window.scrollTo(0, 0)
-                document.documentElement.scrollTop = 0
-                document.body.scrollTop = 0
-                return false
-            }
-        }
-        
-        // Immediate scroll to top
-        window.scrollTo(0, 0)
-        document.documentElement.scrollTop = 0
-        document.body.scrollTop = 0
-        
-        // Also clear any hash from URL
+        // Clear any hash from URL
         if (window.location.hash) {
             window.history.replaceState(null, '', window.location.pathname)
-        }
-        
-        // Add multiple scroll prevention listeners
-        const events = ['scroll', 'wheel', 'touchmove', 'mousewheel', 'DOMMouseScroll']
-        events.forEach(eventType => {
-            window.addEventListener(eventType, preventAllScroll, { passive: false, capture: true })
-            document.addEventListener(eventType, preventAllScroll, { passive: false, capture: true })
-        })
-        
-        // Force scroll to top continuously for 2 seconds
-        const scrollToTop = () => {
-            window.scrollTo(0, 0)
-            document.documentElement.scrollTop = 0
-            document.body.scrollTop = 0
-            if (document.scrollingElement) {
-                document.scrollingElement.scrollTop = 0
-            }
-        }
-        
-        // Scroll to top immediately and repeatedly
-        scrollToTop()
-        const interval = setInterval(scrollToTop, 50)
-        
-        // After 2 seconds, allow scrolling but keep trying to stay at top for another second
-        setTimeout(() => {
-            scrollPreventionActive = false
-            clearInterval(interval)
-        }, 2000)
-        
-        // Final scroll to top after 3 seconds
-        setTimeout(() => {
-            scrollToTop()
-            isInitialLoad = false
-        }, 3000)
-        
-        return () => {
-            clearInterval(interval)
-            events.forEach(eventType => {
-                window.removeEventListener(eventType, preventAllScroll, { capture: true })
-                document.removeEventListener(eventType, preventAllScroll, { capture: true })
-            })
         }
     }, [])
 
