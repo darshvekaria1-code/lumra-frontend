@@ -497,34 +497,11 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [requestStatus, setRequestStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
     const [requestError, setRequestError] = useState("")
 
-    // Only scroll to top on initial page load (not on every render or touch)
+    // Only clear hash from URL on mount - NO scroll interference
     useEffect(() => {
-        // Only scroll to top if we're at the very top or if there's a hash
-        // Don't interfere with user scrolling
-        const hasScrolled = sessionStorage.getItem('landing_page_has_scrolled') === 'true'
-        const hasHash = window.location.hash
-        
-        if (!hasScrolled && !hasHash) {
-            // Only scroll to top if user hasn't scrolled yet and no hash
-            window.scrollTo({ top: 0, behavior: 'instant' })
-        }
-        
-        // Clear any hash from URL
-        if (hasHash) {
+        // Clear any hash from URL without scrolling
+        if (window.location.hash) {
             window.history.replaceState(null, '', window.location.pathname)
-        }
-        
-        // Track user scroll to prevent auto-scroll after they've scrolled
-        const handleScroll = () => {
-            if (window.scrollY > 10) {
-                sessionStorage.setItem('landing_page_has_scrolled', 'true')
-            }
-        }
-        
-        window.addEventListener('scroll', handleScroll, { passive: true })
-        
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
         }
     }, [])
 

@@ -158,33 +158,37 @@
 /* Basic scroll styling - Fix for iPad/iPhone touch scrolling */
 html {
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y pan-x;
+  touch-action: manipulation;
   overflow-x: hidden;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+  height: 100%;
 }
 
 body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y pan-x;
-  overscroll-behavior-y: auto;
-  scroll-behavior: smooth;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+  scroll-behavior: auto;
+  height: 100%;
+  position: relative;
 }
 
 /* Ensure landing page container allows touch scrolling */
 .landing-page-container {
-  touch-action: pan-y pan-x;
+  touch-action: manipulation;
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   position: relative;
+  min-height: 100vh;
 }
 
 /* Main content area - allow touch scrolling */
 #landing-main-content {
-  touch-action: pan-y pan-x;
+  touch-action: manipulation;
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   position: relative;
 }
