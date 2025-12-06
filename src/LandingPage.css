@@ -158,7 +158,7 @@
 /* Basic scroll styling - Fix for iPad/iPhone touch scrolling */
 html {
   -webkit-overflow-scrolling: touch;
-  touch-action: manipulation;
+  touch-action: pan-y;
   overflow-x: hidden;
   scroll-behavior: auto;
   height: 100%;
@@ -167,7 +167,7 @@ html {
 body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  touch-action: manipulation;
+  touch-action: pan-y;
   overscroll-behavior: none;
   scroll-behavior: auto;
   height: 100%;
@@ -176,7 +176,7 @@ body {
 
 /* Ensure landing page container allows touch scrolling */
 .landing-page-container {
-  touch-action: manipulation;
+  touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
   scroll-behavior: auto;
@@ -186,7 +186,7 @@ body {
 
 /* Main content area - allow touch scrolling */
 #landing-main-content {
-  touch-action: manipulation;
+  touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
   scroll-behavior: auto;
