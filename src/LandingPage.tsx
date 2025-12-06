@@ -238,23 +238,7 @@ function Starfield() {
     )
 }
 
-// Left Bar Component
-function LeftBar() {
-    return (
-        <div className="w-[60px] bg-zinc-950 border-r border-zinc-800 flex flex-col items-center pt-8 sticky left-0 top-0 h-screen">
-            <div className="w-2 h-40 rounded-full bg-gradient-to-b from-gray-700 via-gray-600 to-gray-700 opacity-40 animate-pulse shadow-lg" />
-            <div className="flex flex-col gap-8 mt-12">
-                {[...Array(3)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="w-1 h-1 rounded-full bg-gray-700/50 hover:bg-gray-500 transition-colors cursor-pointer"
-                        style={{ animation: `float 3s ease-in-out infinite`, animationDelay: `${i * 0.3}s` }}
-                    />
-                ))}
-            </div>
-        </div>
-    )
-}
+// Left Bar Component - REMOVED (no longer needed)
 
 // Laptop Demo Component
 function LaptopDemoSection() {
@@ -963,12 +947,11 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     }
 
     return (
-        <div className="flex min-h-screen bg-zinc-950 relative landing-page-container">
+        <div className="min-h-screen bg-zinc-950 relative landing-page-container">
             <RollingBackground />
-            <LeftBar />
 
             {/* Main Content - Scrollable */}
-            <div className="flex-1 flex flex-col overflow-hidden relative z-10" id="landing-main-content">
+            <div className="flex flex-col relative z-10" id="landing-main-content">
                 {/* Header */}
                 <header className="border-b border-zinc-800/50 backdrop-blur-md bg-zinc-950/80 sticky top-0 z-50">
                     <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
