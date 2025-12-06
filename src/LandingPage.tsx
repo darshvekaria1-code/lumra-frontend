@@ -5,26 +5,42 @@ import {
 } from "lucide-react"
 import "./LandingPage.css"
 
-// Scroll Animation Hook
+// Scroll Animation Hook - Non-intrusive version
 function useScrollAnimation() {
     const [isVisible, setIsVisible] = useState(false)
     const ref = useRef<HTMLElement>(null)
+    const hasAnimated = useRef(false)
 
     useEffect(() => {
+        // Only animate after user has scrolled a bit to avoid interference
+        const checkScroll = () => {
+            if (window.scrollY > 50 && !hasAnimated.current) {
+                hasAnimated.current = true
+            }
+        }
+        
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) {
+                // Only trigger animation if user has scrolled or section is well into view
+                if (entry.isIntersecting && (hasAnimated.current || entry.intersectionRatio > 0.5)) {
                     setIsVisible(true)
+                    // Unobserve after animation to prevent re-triggering
+                    if (ref.current) {
+                        observer.unobserve(ref.current)
+                    }
                 }
             },
-            { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+            { threshold: [0, 0.1, 0.5], rootMargin: '0px' }
         )
+
+        window.addEventListener('scroll', checkScroll, { passive: true })
 
         if (ref.current) {
             observer.observe(ref.current)
         }
 
         return () => {
+            window.removeEventListener('scroll', checkScroll)
             if (ref.current) {
                 observer.unobserve(ref.current)
             }
@@ -193,6 +209,10 @@ const ScrollSection = React.forwardRef<HTMLDivElement, { children: React.ReactNo
                 id={id}
                 ref={setRefs}
                 className={`${className} ${isVisible ? 'scroll-animate-in' : 'scroll-animate-out'}`}
+                style={{ 
+                    // Prevent layout shifts that might interfere with scroll
+                    contain: 'layout style paint'
+                }}
             >
                 {children}
             </section>
