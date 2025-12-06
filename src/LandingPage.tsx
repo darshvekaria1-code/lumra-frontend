@@ -513,13 +513,20 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [requestStatus, setRequestStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
     const [requestError, setRequestError] = useState("")
 
-    // Scroll to top when landing page loads - run multiple times to ensure it sticks
+    // Scroll to top when landing page loads - prevent ALL scrolling for first 2 seconds
     useEffect(() => {
-        // Prevent any scrolling during initial load
-        const preventScroll = (e: Event) => {
-            if (window.scrollY > 0) {
+        let isInitialLoad = true
+        let scrollPreventionActive = true
+        
+        // Aggressive scroll prevention
+        const preventAllScroll = (e: Event) => {
+            if (scrollPreventionActive && window.scrollY > 10) {
                 e.preventDefault()
+                e.stopPropagation()
                 window.scrollTo(0, 0)
+                document.documentElement.scrollTop = 0
+                document.body.scrollTop = 0
+                return false
             }
         }
         
@@ -533,41 +540,45 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             window.history.replaceState(null, '', window.location.pathname)
         }
         
-        // Add scroll prevention temporarily
-        window.addEventListener('scroll', preventScroll, { passive: false })
-        window.addEventListener('wheel', preventScroll, { passive: false })
+        // Add multiple scroll prevention listeners
+        const events = ['scroll', 'wheel', 'touchmove', 'mousewheel', 'DOMMouseScroll']
+        events.forEach(eventType => {
+            window.addEventListener(eventType, preventAllScroll, { passive: false, capture: true })
+            document.addEventListener(eventType, preventAllScroll, { passive: false, capture: true })
+        })
         
-        // Force scroll to top multiple times
-        const timeouts = [
-            setTimeout(() => {
-                window.scrollTo(0, 0)
-                document.documentElement.scrollTop = 0
-                document.body.scrollTop = 0
-            }, 50),
-            setTimeout(() => {
-                window.scrollTo(0, 0)
-                document.documentElement.scrollTop = 0
-                document.body.scrollTop = 0
-            }, 100),
-            setTimeout(() => {
-                window.scrollTo(0, 0)
-                document.documentElement.scrollTop = 0
-                document.body.scrollTop = 0
-            }, 300),
-            setTimeout(() => {
-                window.scrollTo(0, 0)
-                document.documentElement.scrollTop = 0
-                document.body.scrollTop = 0
-                // Remove scroll prevention after content loads
-                window.removeEventListener('scroll', preventScroll)
-                window.removeEventListener('wheel', preventScroll)
-            }, 1000)
-        ]
+        // Force scroll to top continuously for 2 seconds
+        const scrollToTop = () => {
+            window.scrollTo(0, 0)
+            document.documentElement.scrollTop = 0
+            document.body.scrollTop = 0
+            if (document.scrollingElement) {
+                document.scrollingElement.scrollTop = 0
+            }
+        }
+        
+        // Scroll to top immediately and repeatedly
+        scrollToTop()
+        const interval = setInterval(scrollToTop, 50)
+        
+        // After 2 seconds, allow scrolling but keep trying to stay at top for another second
+        setTimeout(() => {
+            scrollPreventionActive = false
+            clearInterval(interval)
+        }, 2000)
+        
+        // Final scroll to top after 3 seconds
+        setTimeout(() => {
+            scrollToTop()
+            isInitialLoad = false
+        }, 3000)
         
         return () => {
-            timeouts.forEach(clearTimeout)
-            window.removeEventListener('scroll', preventScroll)
-            window.removeEventListener('wheel', preventScroll)
+            clearInterval(interval)
+            events.forEach(eventType => {
+                window.removeEventListener(eventType, preventAllScroll, { capture: true })
+                document.removeEventListener(eventType, preventAllScroll, { capture: true })
+            })
         }
     }, [])
 
@@ -798,25 +809,39 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         }
     }, [chatMessages])
 
-    // Auto-conversation when section comes into view
+    // Auto-conversation when section comes into view - but don't scroll the page
     useEffect(() => {
+        // Only start auto-conversation if user has scrolled down manually (not on initial load)
+        const hasUserScrolled = () => {
+            return window.scrollY > 100 || sessionStorage.getItem('user_has_scrolled') === 'true'
+        }
+        
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting && !hasAutoConversationStarted) {
+                    if (entry.isIntersecting && !hasAutoConversationStarted && hasUserScrolled()) {
                         setHasAutoConversationStarted(true)
                         startAutoConversation()
                     }
                 })
             },
-            { threshold: 0.3 }
+            { threshold: 0.3, rootMargin: '0px' }
         )
+
+        // Track user scroll to know if they've manually scrolled
+        const handleScroll = () => {
+            if (window.scrollY > 100) {
+                sessionStorage.setItem('user_has_scrolled', 'true')
+            }
+        }
+        window.addEventListener('scroll', handleScroll, { passive: true })
 
         if (aiAssistantSectionRef.current) {
             observer.observe(aiAssistantSectionRef.current)
         }
 
         return () => {
+            window.removeEventListener('scroll', handleScroll)
             if (aiAssistantSectionRef.current) {
                 observer.unobserve(aiAssistantSectionRef.current)
             }
