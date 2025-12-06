@@ -17,6 +17,9 @@ body,
     background: radial-gradient(circle at top, #eef2ff, #f8fafc 55%);
     position: relative;
     transition: background 0.3s ease;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior-y: contain;
 }
 
 /* Login Page Styles */
