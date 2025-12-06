@@ -157,17 +157,19 @@
   scroll-margin-top: 80px;
 }
 
-/* Basic scroll styling - Fix for iPad/iPhone touch scrolling */
+/* Basic scroll styling - Make entire page scrollable naturally */
 html {
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
   overflow-x: hidden;
+  overflow-y: auto;
   scroll-behavior: auto;
   height: 100%;
 }
 
 body {
   overflow-x: hidden;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
   overscroll-behavior: none;
@@ -176,21 +178,31 @@ body {
   position: relative;
 }
 
-/* Ensure landing page container allows touch scrolling */
+/* Ensure landing page container allows natural scrolling */
 .landing-page-container {
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
+  overflow-y: visible;
   scroll-behavior: auto;
   position: relative;
   min-height: 100vh;
+  width: 100%;
 }
 
-/* Main content area - allow touch scrolling */
+/* Main content area - allow natural scrolling */
 #landing-main-content {
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
+  overflow-y: visible;
   scroll-behavior: auto;
   position: relative;
+  width: 100%;
+}
+
+/* Remove any scrollbar restrictions */
+main {
+  overflow: visible !important;
+  height: auto !important;
 }

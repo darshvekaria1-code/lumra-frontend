@@ -968,11 +968,11 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     }
 
     return (
-        <div className="min-h-screen bg-zinc-950 relative landing-page-container" style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}>
+        <div className="min-h-screen bg-zinc-950 relative landing-page-container">
             <RollingBackground />
 
-            {/* Main Content - Scrollable */}
-            <div className="flex flex-col relative z-10" id="landing-main-content" style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}>
+            {/* Main Content - Naturally Scrollable */}
+            <div className="relative z-10" id="landing-main-content">
                 {/* Header */}
                 <header className="border-b border-zinc-800/50 backdrop-blur-md bg-zinc-950/80 sticky top-0 z-50">
                     <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -1133,7 +1133,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     )}
                 </header>
 
-                <main className="flex-1 overflow-y-auto custom-scrollbar relative">
+                <main className="flex-1 relative">
                     {/* Background for entire main content - seamless across all sections */}
                     <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black pointer-events-none z-0">
                         {/* Starfield texture overlay */}

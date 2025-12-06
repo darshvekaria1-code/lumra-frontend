@@ -19,7 +19,9 @@ body,
     transition: background 0.3s ease;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
-    overscroll-behavior-y: contain;
+    overscroll-behavior: none;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* Login Page Styles */
