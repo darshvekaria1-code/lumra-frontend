@@ -323,16 +323,7 @@ export function App() {
         }
         return false
     })
-    const [hasValidDemoKey, setHasValidDemoKey] = useState<boolean>(() => {
-        // Check if user has a valid demo key stored (only accept "11223344")
-        const storedKey = localStorage.getItem("lumra_demo_key")
-        const isValid = storedKey === "11223344"
-        // Clean up invalid demo keys
-        if (storedKey && !isValid) {
-            localStorage.removeItem("lumra_demo_key")
-        }
-        return isValid
-    })
+    const [hasValidDemoKey, setHasValidDemoKey] = useState<boolean>(false) // Start as false, check on mount
     const [showSignUp, setShowSignUp] = useState(false)
     
     // Login form state
@@ -382,29 +373,50 @@ export function App() {
 
     // Check demo key revocation status
     const checkDemoKeyStatus = async () => {
+        const storedKey = localStorage.getItem("lumra_demo_key")
+        if (storedKey !== "11223344") {
+            // No valid demo key, nothing to check
+            return
+        }
+
         try {
+            console.log(`[Demo Key] Checking revocation status from ${API_BASE_URL}/api/demo/status`)
             const response = await fetch(`${API_BASE_URL}/api/demo/status`, {
-                cache: 'no-cache',
+                method: 'GET',
+                cache: 'no-store',
                 headers: {
-                    'Cache-Control': 'no-cache'
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache'
                 }
             })
+            
+            console.log(`[Demo Key] Status response:`, response.status, response.ok)
+            
             if (response.ok) {
                 const data = await response.json()
-                if (data.revoked) {
+                console.log(`[Demo Key] Status data:`, data)
+                
+                if (data.revoked === true) {
                     // Demo keys are revoked - clear localStorage and force redirect to landing page
-                    console.log("[Demo Key] ⚠️ Demo keys revoked - kicking out user immediately")
+                    console.log("[Demo Key] ⚠️ DEMO KEYS REVOKED - Kicking out user immediately!")
                     localStorage.removeItem("lumra_demo_key")
                     localStorage.removeItem("lumra_loggedIn")
                     setHasValidDemoKey(false)
                     setIsLoggedInState(false)
                     // Force immediate redirect to landing page
                     window.location.replace(window.location.origin)
-                    return
+                    return false
+                } else {
+                    console.log("[Demo Key] ✅ Demo keys are valid")
+                    return true
                 }
+            } else {
+                console.error(`[Demo Key] Status check failed: ${response.status}`)
+                return false
             }
         } catch (error) {
-            console.error("Error checking demo key status:", error)
+            console.error("[Demo Key] Error checking demo key status:", error)
+            return false
         }
     }
 
@@ -442,37 +454,27 @@ export function App() {
         // Clean up invalid demo keys and check revocation status
         const storedKey = localStorage.getItem("lumra_demo_key")
         if (storedKey && storedKey !== "11223344") {
+            // Invalid demo key - remove it
             localStorage.removeItem("lumra_demo_key")
             setHasValidDemoKey(false)
         } else if (storedKey === "11223344") {
-            // Check if demo keys are revoked BEFORE setting as valid
-            const checkRevocation = async () => {
-                try {
-                    const response = await fetch(`${API_BASE_URL}/api/demo/status`, {
-                        cache: 'no-cache'
-                    })
-                    if (response.ok) {
-                        const data = await response.json()
-                        if (data.revoked) {
-                            // Revoked - clear and redirect
-                            localStorage.removeItem("lumra_demo_key")
-                            localStorage.removeItem("lumra_loggedIn")
-                            setHasValidDemoKey(false)
-                            setIsLoggedInState(false)
-                            window.location.replace(window.location.origin)
-                            return
-                        }
-                    }
-                    // Not revoked - allow access
+            // Valid demo key found - check revocation status BEFORE allowing access
+            console.log("[Demo Key] Valid demo key found, checking revocation status...")
+            checkDemoKeyStatus().then((isValid) => {
+                if (isValid) {
+                    console.log("[Demo Key] Demo key is valid, allowing access")
                     setHasValidDemoKey(true)
-                } catch (error) {
-                    console.error("Error checking revocation:", error)
-                    // On error, allow access (fail open)
-                    setHasValidDemoKey(true)
+                } else {
+                    console.log("[Demo Key] Demo key check failed or revoked")
+                    setHasValidDemoKey(false)
                 }
-            }
-            checkRevocation()
+            }).catch((error) => {
+                console.error("[Demo Key] Error in revocation check:", error)
+                // On error, don't allow access (fail closed for security)
+                setHasValidDemoKey(false)
+            })
         } else {
+            // No demo key
             setHasValidDemoKey(false)
         }
     }, [])
@@ -481,15 +483,27 @@ export function App() {
     useEffect(() => {
         const storedKey = localStorage.getItem("lumra_demo_key")
         if (storedKey === "11223344") {
+            console.log("[Demo Key] Setting up periodic revocation check (every 5 seconds)")
+            
             // Check immediately
             checkDemoKeyStatus()
             
-            // Check every 10 seconds (more frequent for better responsiveness)
+            // Check every 5 seconds (very frequent for immediate response)
             const interval = setInterval(() => {
-                checkDemoKeyStatus()
-            }, 10000)
+                const currentKey = localStorage.getItem("lumra_demo_key")
+                if (currentKey === "11223344") {
+                    console.log("[Demo Key] Periodic check running...")
+                    checkDemoKeyStatus()
+                } else {
+                    console.log("[Demo Key] No demo key found, stopping checks")
+                    clearInterval(interval)
+                }
+            }, 5000) // Check every 5 seconds
             
-            return () => clearInterval(interval)
+            return () => {
+                console.log("[Demo Key] Cleaning up periodic check")
+                clearInterval(interval)
+            }
         }
     }, []) // Run once on mount, then interval handles the rest
 
