@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react"
 import "./App.css"
 import LandingPage from "./LandingPage"
+import CookieConsent from "./CookieConsent"
 
 type ResponseState = {
     status: "idle" | "loading" | "success" | "error"
@@ -3398,6 +3399,9 @@ export function App() {
                     </div>
                 </div>
             )}
+
+            {/* Cookie Consent Popup */}
+            <CookieConsent />
         </div>
     )
 }
