@@ -25,9 +25,21 @@ export default function CookieConsent() {
     const [showTerms, setShowTerms] = useState(false)
 
     useEffect(() => {
-        // Check if user has already accepted cookies
+        // Check if user has already accepted cookies (check both cookies and localStorage for migration)
         const cookieConsent = getCookie("lumra_cookie_consent")
-        if (!cookieConsent) {
+        const localStorageConsent = localStorage.getItem('lumra_cookie_consent')
+        
+        // If there's an old localStorage consent, migrate it to cookies
+        if (localStorageConsent && !cookieConsent) {
+            setCookie("lumra_cookie_consent", localStorageConsent, 365)
+            if (localStorageConsent === 'accepted') {
+                setCookie("lumra_cookie_timestamp", new Date().toISOString(), 365)
+                setCookie("lumra_analytics_enabled", "true", 365)
+            }
+        }
+        
+        // Only show popup if no consent exists
+        if (!cookieConsent && !localStorageConsent) {
             // Show consent popup after a short delay
             setTimeout(() => {
                 setShowConsent(true)
