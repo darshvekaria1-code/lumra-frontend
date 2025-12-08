@@ -1401,6 +1401,11 @@ export function App() {
                     setHasValidDemoKey(true)
                     localStorage.setItem("lumra_demo_key", key)
                 }}
+                onLoginClick={() => {
+                    // Set demo key to allow access to login page
+                    setHasValidDemoKey(true)
+                    localStorage.setItem("lumra_demo_key", "11223344")
+                }}
             />
         )
     }

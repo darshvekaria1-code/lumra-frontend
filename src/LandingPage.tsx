@@ -94,9 +94,10 @@ function Logo({ size = 40 }: { size?: number }) {
 
 interface LandingPageProps {
     onDemoKeySubmit: (key: string) => void
+    onLoginClick?: () => void
 }
 
-export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
+export default function LandingPage({ onDemoKeySubmit, onLoginClick }: LandingPageProps) {
     const [demoKey, setDemoKey] = useState("")
     const [demoKeyError, setDemoKeyError] = useState("")
     const [isValidatingDemoKey, setIsValidatingDemoKey] = useState(false)
@@ -251,12 +252,22 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         <div className="landing-page-container">
             <nav className="landing-nav">
                 <Logo />
-                <button 
-                    onClick={() => setShowDemoModal(true)}
-                    className="get-started-btn"
-                >
-                    Get Started
-                </button>
+                <div className="nav-buttons">
+                    {onLoginClick && (
+                        <button 
+                            onClick={onLoginClick}
+                            className="login-btn"
+                        >
+                            Login
+                        </button>
+                    )}
+                    <button 
+                        onClick={() => setShowDemoModal(true)}
+                        className="get-started-btn"
+                    >
+                        Get Started
+                    </button>
+                </div>
             </nav>
 
             <main id="landing-main-content">
