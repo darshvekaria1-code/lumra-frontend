@@ -380,6 +380,27 @@ export function App() {
         }
     }, [])
 
+    // Check demo key revocation status
+    const checkDemoKeyStatus = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/demo/status`)
+            if (response.ok) {
+                const data = await response.json()
+                if (data.revoked) {
+                    // Demo keys are revoked - clear localStorage and redirect
+                    localStorage.removeItem("lumra_demo_key")
+                    setHasValidDemoKey(false)
+                    // If user is logged in with demo key, log them out
+                    if (!isLoggedIn && hasValidDemoKey) {
+                        window.location.reload()
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error checking demo key status:", error)
+        }
+    }
+
     // Clean up on initial load - ensure landing page shows for new visitors
     useEffect(() => {
         // Force check login state on mount
@@ -418,10 +439,27 @@ export function App() {
             setHasValidDemoKey(false)
         } else if (storedKey === "11223344") {
             setHasValidDemoKey(true)
+            // Check if demo keys are revoked
+            checkDemoKeyStatus()
         } else {
             setHasValidDemoKey(false)
         }
     }, [])
+
+    // Periodically check demo key status if user has demo key
+    useEffect(() => {
+        if (hasValidDemoKey && !isLoggedIn) {
+            // Check immediately
+            checkDemoKeyStatus()
+            
+            // Check every 30 seconds
+            const interval = setInterval(() => {
+                checkDemoKeyStatus()
+            }, 30000)
+            
+            return () => clearInterval(interval)
+        }
+    }, [hasValidDemoKey, isLoggedIn])
 
     const [userId] = useState<string>(getUserId())
     const [toneAdapted, setToneAdapted] = useState(false)
