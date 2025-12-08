@@ -63,8 +63,8 @@ export default function CookieConsent() {
     return (
         <>
             {/* Cookie Consent Popup */}
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998] flex items-end justify-center p-4 sm:p-6">
-                <div className="bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 border border-purple-500/30 rounded-2xl shadow-2xl max-w-2xl w-full p-6 sm:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998] flex items-end justify-center p-4 sm:p-6 animate-fade-in">
+                <div className="bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 border border-purple-500/30 rounded-2xl shadow-2xl max-w-2xl w-full p-6 sm:p-8 animate-slide-up">
                     <div className="flex items-start gap-4">
                         <div className="flex-shrink-0">
                             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
@@ -117,8 +117,8 @@ export default function CookieConsent() {
 
             {/* Terms & Conditions Modal */}
             {showTerms && (
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
-                    <div className="bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 border border-purple-500/30 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 animate-in fade-in zoom-in-95 duration-300">
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 border border-purple-500/30 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 animate-scale-in">
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
                                 <FileText className="w-6 h-6 text-purple-400" />
