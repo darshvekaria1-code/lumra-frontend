@@ -15,3 +15,4 @@ Place your IB and IGCSE logo images in this directory:
 - If images are not found, the code will fallback to text badges
 - Make sure the files are named exactly as shown above
 
+
