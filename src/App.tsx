@@ -383,17 +383,24 @@ export function App() {
     // Check demo key revocation status
     const checkDemoKeyStatus = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/demo/status`)
+            const response = await fetch(`${API_BASE_URL}/api/demo/status`, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            })
             if (response.ok) {
                 const data = await response.json()
                 if (data.revoked) {
-                    // Demo keys are revoked - clear localStorage and redirect
+                    // Demo keys are revoked - clear localStorage and force redirect to landing page
+                    console.log("[Demo Key] ⚠️ Demo keys revoked - kicking out user immediately")
                     localStorage.removeItem("lumra_demo_key")
+                    localStorage.removeItem("lumra_loggedIn")
                     setHasValidDemoKey(false)
-                    // If user is logged in with demo key, log them out
-                    if (!isLoggedIn && hasValidDemoKey) {
-                        window.location.reload()
-                    }
+                    setIsLoggedInState(false)
+                    // Force immediate redirect to landing page
+                    window.location.replace(window.location.origin)
+                    return
                 }
             }
         } catch (error) {
@@ -432,15 +439,39 @@ export function App() {
             setIsLoggedInState(false)
         }
         
-        // Clean up invalid demo keys
+        // Clean up invalid demo keys and check revocation status
         const storedKey = localStorage.getItem("lumra_demo_key")
         if (storedKey && storedKey !== "11223344") {
             localStorage.removeItem("lumra_demo_key")
             setHasValidDemoKey(false)
         } else if (storedKey === "11223344") {
-            setHasValidDemoKey(true)
-            // Check if demo keys are revoked
-            checkDemoKeyStatus()
+            // Check if demo keys are revoked BEFORE setting as valid
+            const checkRevocation = async () => {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/demo/status`, {
+                        cache: 'no-cache'
+                    })
+                    if (response.ok) {
+                        const data = await response.json()
+                        if (data.revoked) {
+                            // Revoked - clear and redirect
+                            localStorage.removeItem("lumra_demo_key")
+                            localStorage.removeItem("lumra_loggedIn")
+                            setHasValidDemoKey(false)
+                            setIsLoggedInState(false)
+                            window.location.replace(window.location.origin)
+                            return
+                        }
+                    }
+                    // Not revoked - allow access
+                    setHasValidDemoKey(true)
+                } catch (error) {
+                    console.error("Error checking revocation:", error)
+                    // On error, allow access (fail open)
+                    setHasValidDemoKey(true)
+                }
+            }
+            checkRevocation()
         } else {
             setHasValidDemoKey(false)
         }
@@ -448,18 +479,19 @@ export function App() {
 
     // Periodically check demo key status if user has demo key
     useEffect(() => {
-        if (hasValidDemoKey && !isLoggedIn) {
+        const storedKey = localStorage.getItem("lumra_demo_key")
+        if (storedKey === "11223344") {
             // Check immediately
             checkDemoKeyStatus()
             
-            // Check every 30 seconds
+            // Check every 10 seconds (more frequent for better responsiveness)
             const interval = setInterval(() => {
                 checkDemoKeyStatus()
-            }, 30000)
+            }, 10000)
             
             return () => clearInterval(interval)
         }
-    }, [hasValidDemoKey, isLoggedIn])
+    }, []) // Run once on mount, then interval handles the rest
 
     const [userId] = useState<string>(getUserId())
     const [toneAdapted, setToneAdapted] = useState(false)
