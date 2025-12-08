@@ -374,7 +374,7 @@ export function App() {
     // Check demo key revocation status
     const checkDemoKeyStatus = async () => {
         const storedKey = localStorage.getItem("lumra_demo_key")
-        if (storedKey !== "11223344") {
+        if (storedKey !== "112211") {
             // No valid demo key, nothing to check
             return
         }
@@ -453,11 +453,11 @@ export function App() {
         
         // Clean up invalid demo keys and check revocation status
         const storedKey = localStorage.getItem("lumra_demo_key")
-        if (storedKey && storedKey !== "11223344") {
+        if (storedKey && storedKey !== "112211") {
             // Invalid demo key - remove it
             localStorage.removeItem("lumra_demo_key")
             setHasValidDemoKey(false)
-        } else if (storedKey === "11223344") {
+        } else if (storedKey === "112211") {
             // Valid demo key found - check revocation status BEFORE allowing access
             console.log("[Demo Key] Valid demo key found, checking revocation status...")
             checkDemoKeyStatus().then((isValid) => {
@@ -482,7 +482,7 @@ export function App() {
     // Periodically check demo key status if user has demo key
     useEffect(() => {
         const storedKey = localStorage.getItem("lumra_demo_key")
-        if (storedKey === "11223344") {
+        if (storedKey === "112211") {
             console.log("[Demo Key] Setting up periodic revocation check (every 5 seconds)")
             
             // Check immediately
@@ -491,7 +491,7 @@ export function App() {
             // Check every 5 seconds (very frequent for immediate response)
             const interval = setInterval(() => {
                 const currentKey = localStorage.getItem("lumra_demo_key")
-                if (currentKey === "11223344") {
+                if (currentKey === "112211") {
                     console.log("[Demo Key] Periodic check running...")
                     checkDemoKeyStatus()
                 } else {
