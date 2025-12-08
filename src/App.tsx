@@ -10,7 +10,21 @@ type ResponseState = {
     imageUrl?: string | null
 }
 
-const API_BASE_URL = import.meta.env.VITE_LUMRA_API_BASE ?? "http://localhost:5050"
+// Use relative URL to hide backend URL from frontend inspection
+// In production, this will use the same domain (via reverse proxy or same origin)
+// In development, Vite proxy handles the routing
+const getApiBaseUrl = () => {
+    // Check if we're in production (same origin) or need to use proxy
+    if (import.meta.env.PROD) {
+        // Production: use relative URL (same origin) or environment variable if set
+        return import.meta.env.VITE_LUMRA_API_BASE || ''
+    } else {
+        // Development: use relative URL (Vite proxy will handle it)
+        return ''
+    }
+}
+
+const API_BASE_URL = getApiBaseUrl()
 
 const defaultResponse: ResponseState = {
     status: "idle",
@@ -380,7 +394,7 @@ export function App() {
         }
 
         try {
-            console.log(`[Demo Key] Checking revocation status from ${API_BASE_URL}/api/demo/status`)
+            console.log(`[Demo Key] Checking revocation status`)
             const response = await fetch(`${API_BASE_URL}/api/demo/status`, {
                 method: 'GET',
                 cache: 'no-store',

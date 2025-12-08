@@ -50,7 +50,16 @@ function useScrollAnimation() {
     return { ref, isVisible }
 }
 
-const API_BASE_URL = import.meta.env.VITE_LUMRA_API_BASE ?? "http://localhost:5050"
+// Use relative URL to hide backend URL from frontend inspection
+const getApiBaseUrl = () => {
+    if (import.meta.env.PROD) {
+        return import.meta.env.VITE_LUMRA_API_BASE || ''
+    } else {
+        return ''
+    }
+}
+
+const API_BASE_URL = getApiBaseUrl()
 
 type LandingPageProps = {
     onDemoKeySubmit: (key: string) => void
