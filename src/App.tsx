@@ -16,7 +16,8 @@ type ResponseState = {
 const getApiBaseUrl = () => {
     // Check if we're in production (same origin) or need to use proxy
     if (import.meta.env.PROD) {
-        // Production: use relative URL (same origin) or environment variable if set
+        // Production: use environment variable for API base URL (e.g., https://api.eluralearning.com)
+        // If not set, fall back to relative URL (same origin)
         return import.meta.env.VITE_LUMRA_API_BASE || ''
     } else {
         // Development: use relative URL (Vite proxy will handle it)
@@ -1497,7 +1498,7 @@ export function App() {
             <div className="lumra-login-container">
                 <div className="lumra-login-card">
                     <div className="login-header">
-                        <h1>🚀 Lumra AI</h1>
+                        <h1>🚀 Elura AI</h1>
                         <p className="login-subtitle">
                             {showSignUp ? "Create an account to access combined AI intelligence" : "Sign in to access combined AI intelligence"}
                         </p>
@@ -1987,16 +1988,16 @@ export function App() {
             <div className="lumra-content">
                 <header className="lumra-header">
                     <div>
-                        <p className="eyebrow">Lumra AI · Combined Intelligence</p>
-                        <h1>Powered by Lumra AI</h1>
+                        <p className="eyebrow">Elura AI · Combined Intelligence</p>
+                        <h1>Powered by Elura AI</h1>
                         <p className="subhead">
-                            Ask once, get a unified answer that combines the best insights from both AI models. Lumra learns your communication style and adapts over time.
+                            Ask once, get a unified answer that combines the best insights from both AI models. Elura learns your communication style and adapts over time.
                         </p>
                     </div>
                     <div style={{ display: "flex", gap: "12px", alignItems: "center", position: "relative" }}>
                         <div className={`lumra-ai-badge ${maintenanceMode?.enabled ? "maintenance-mode" : ""}`}>
                             <span className={`lumra-dot ${maintenanceMode?.enabled ? "maintenance-dot" : ""}`} />
-                            Lumra AI
+                            Elura AI
                             {maintenanceMode?.enabled && (
                                 <span style={{ 
                                     marginLeft: "8px", 
@@ -2097,7 +2098,7 @@ export function App() {
                 {/* Main content area - add your website content here */}
                 <div className="main-content">
                     <p style={{ color: "#64748b", marginTop: "48px" }}>
-                        Your main website content goes here. The Lumra AI sidebar is on the right.
+                        Your main website content goes here. The Elura AI sidebar is on the right.
                     </p>
                 </div>
             </div>
@@ -2135,10 +2136,10 @@ export function App() {
                         setSidebarExpanded(true)
                     }
                 }}
-                title="Open Lumra AI"
+                title="Open Elura AI"
             >
                 <svg className="lumra-logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    {/* Lumra Logo - stylized "L" with interconnected orbits */}
+                    {/* Elura Logo - stylized "L" with interconnected orbits */}
                     <circle cx="12" cy="12" r="2" fill="currentColor"/>
                     <ellipse cx="12" cy="12" rx="8" ry="4" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.8" transform="rotate(-30 12 12)"/>
                     <ellipse cx="12" cy="12" rx="8" ry="4" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.8" transform="rotate(30 12 12)"/>
@@ -2507,7 +2508,7 @@ export function App() {
                                 }}
                                 onMouseDown={handleDragStart}
                             >
-                                <h2 className="sidebar-expanded-title">Lumra AI</h2>
+                                <h2 className="sidebar-expanded-title">Elura AI</h2>
                                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                                     <div style={{ 
                                         fontSize: '0.75rem', 
@@ -2807,7 +2808,7 @@ export function App() {
                                     </div>
                                     <textarea
                                         value={prompt}
-                                        placeholder={maintenanceMode?.enabled ? "AI services are under maintenance..." : "Ask Lumra anything... (Try: 'Read my page and summarize it' or paste an image with Ctrl+V)"}
+                                        placeholder={maintenanceMode?.enabled ? "AI services are under maintenance..." : "Ask Elura anything... (Try: 'Read my page and summarize it' or paste an image with Ctrl+V)"}
                                         onChange={(event) => setPrompt(event.target.value)}
                                         onPaste={async (e) => {
                                             // Handle image paste
@@ -2957,12 +2958,12 @@ export function App() {
                                         type="submit" 
                                         className="primary-dark" 
                                         disabled={isSubmitting || maintenanceMode?.enabled}
-                                        title={maintenanceMode?.enabled ? maintenanceMode.message : "Ask Lumra AI"}
+                                        title={maintenanceMode?.enabled ? maintenanceMode.message : "Ask Elura AI"}
                                         style={{ flex: 1 }}
                                     >
                                         {maintenanceMode?.enabled 
                                             ? "⚠️ AI Under Maintenance" 
-                                            : (isSubmitting ? "Lumra AI is thinking…" : "Ask Lumra AI")
+                                            : (isSubmitting ? "Elura AI is thinking…" : "Ask Elura AI")
                                         }
                                     </button>
                                     <button type="button" className="ghost-dark" onClick={resetResponse} disabled={isSubmitting || maintenanceMode?.enabled}>
@@ -3055,7 +3056,7 @@ export function App() {
                                         <header>
                                             <div className="response-title">
                                                 <span className="pill-dark">
-                                                    Lumra AI
+                                                    Elura AI
                                                 </span>
                                                 <span className={`status-dark ${response.status}`}>{response.status}</span>
                                             </div>
@@ -3115,7 +3116,7 @@ export function App() {
                                 <div className="orbit orbit-3"></div>
                             </div>
                         </div>
-                        <h1 className="welcome-title">Welcome to Lumra AI</h1>
+                        <h1 className="welcome-title">Welcome to Elura AI</h1>
                         <p className="welcome-tagline">Intelligence Amplified, Possibilities Unlimited</p>
                         <div className="welcome-particles">
                             {[...Array(20)].map((_, i) => (
@@ -3145,7 +3146,7 @@ export function App() {
                             <div className="ai-energy-orb orb-3"></div>
                         </div>
                         <div className="ai-activation-text">
-                            <span className="ai-text-line">Lumra</span>
+                            <span className="ai-text-line">Elura</span>
                             <span className="ai-text-line">AI</span>
                         </div>
                         <div className="ai-grid-pattern"></div>

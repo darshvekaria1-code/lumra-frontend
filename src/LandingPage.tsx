@@ -149,10 +149,10 @@ function Logo({ size = 40 }: { size?: number }) {
                 />
             </svg>
             
-            {/* Lumra text with glow */}
+            {/* Elura text with glow */}
             <div className="relative">
                 <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
-                    Lumra
+                    Elura
                 </span>
             </div>
         </div>
@@ -369,7 +369,7 @@ function LaptopDemoSection() {
     const [chatMessages, setChatMessages] = useState([
         {
             type: "ai" as const,
-            text: "Hi! I'm Lumra AI, your personalized learning assistant. What would you like to learn today?",
+            text: "Hi! I'm Elura AI, your personalized learning assistant. What would you like to learn today?",
         },
     ])
     const [hasAnimated, setHasAnimated] = useState(false)
@@ -430,7 +430,7 @@ function LaptopDemoSection() {
                                                 <div className="w-3 h-3 rounded-full bg-yellow-500" />
                                                 <div className="w-3 h-3 rounded-full bg-green-500" />
                                             </div>
-                                            <span className="text-gray-400 text-xs">Lumra AI Assistant</span>
+                                            <span className="text-gray-400 text-xs">Elura AI Assistant</span>
                                         </div>
 
                                         {/* Chat Messages */}
@@ -510,7 +510,7 @@ function LaptopDemoSection() {
                         </h2>
 
                         <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                            Lumra AI is more than just a chatbot. It's your dedicated learning partner that understands your goals,
+                            Elura AI is more than just a chatbot. It's your dedicated learning partner that understands your goals,
                             adapts to your pace, and provides personalized guidance every step of the way.
                         </p>
 
@@ -603,7 +603,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
     const [chatMessages, setChatMessages] = useState<Array<{ type: "user" | "ai"; text: string }>>([
         {
             type: "ai",
-            text: "Hello! I'm Lumra AI, your personalized learning assistant. What would you like to learn today?",
+            text: "Hello! I'm Elura AI, your personalized learning assistant. What would you like to learn today?",
         },
     ])
     const [isChatLoading, setIsChatLoading] = useState(false)
@@ -903,7 +903,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             // Product links
             "Features": {
                 title: "Features",
-                message: "Lumra AI offers personalized learning paths, real-time AI assistance, curriculum-aligned content for IB and IGCSE, progress tracking, interactive quizzes, and comprehensive study materials. Get a demo key to explore all features!"
+                message: "Elura AI offers personalized learning paths, real-time AI assistance, curriculum-aligned content for IB and IGCSE, progress tracking, interactive quizzes, and comprehensive study materials. Get a demo key to explore all features!"
             },
             "Pricing": {
                 title: "Pricing",
@@ -915,12 +915,12 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             },
             "Roadmap": {
                 title: "Roadmap",
-                message: "We're constantly improving Lumra AI! Upcoming features include advanced analytics, mobile apps, offline mode, and expanded curriculum support. Stay tuned for updates by subscribing to our newsletter!"
+                message: "We're constantly improving Elura AI! Upcoming features include advanced analytics, mobile apps, offline mode, and expanded curriculum support. Stay tuned for updates by subscribing to our newsletter!"
             },
             // Company links
             "About": {
-                title: "About Lumra",
-                message: "Lumra AI is an innovative learning platform designed for IB and IGCSE students. Founded by Darsh Vekaria and Siddhant Sathe, we're committed to making personalized, AI-powered education accessible to all students."
+                title: "About Elura",
+                message: "Elura AI is an innovative learning platform designed for IB and IGCSE students. Founded by Darsh Vekaria and Siddhant Sathe, we're committed to making personalized, AI-powered education accessible to all students."
             },
             "Blog": {
                 title: "Blog",
@@ -983,7 +983,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 },
                 body: JSON.stringify({
                     prompt: userQuestion,
-                    system: "You are Lumra AI, a friendly and helpful personalized learning assistant for IB and IGCSE students. The user is asking about what they studied yesterday in English class and where they might have missed something. Provide a helpful, encouraging response that acknowledges their question and offers to help them review their English studies. Keep it under 200 words.",
+                    system: "You are Elura AI, a friendly and helpful personalized learning assistant for IB and IGCSE students. The user is asking about what they studied yesterday in English class and where they might have missed something. Provide a helpful, encouraging response that acknowledges their question and offers to help them review their English studies. Keep it under 200 words.",
                     temperature: 0.7,
                 }),
             })
@@ -1036,7 +1036,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 },
                 body: JSON.stringify({
                     prompt: userMessage,
-                    system: "You are Lumra AI, a friendly and helpful personalized learning assistant for IB and IGCSE students. Provide clear, concise, and encouraging responses. Help students with their learning goals, answer questions about subjects, and offer study tips. Keep responses under 200 words when possible.",
+                    system: "You are Elura AI, a friendly and helpful personalized learning assistant for IB and IGCSE students. Provide clear, concise, and encouraging responses. Help students with their learning goals, answer questions about subjects, and offer study tips. Keep responses under 200 words when possible.",
                     temperature: 0.7,
                 }),
             })
@@ -1052,7 +1052,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                     ...prev,
                     {
                         type: "ai",
-                        text: "I'm sorry, I'm having trouble connecting right now. Please try again in a moment, or get a demo key to access the full Lumra AI experience!",
+                        text: "I'm sorry, I'm having trouble connecting right now. Please try again in a moment, or get a demo key to access the full Elura AI experience!",
                     },
                 ])
             }
@@ -1062,7 +1062,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 ...prev,
                 {
                     type: "ai",
-                    text: "I'm sorry, I encountered an error. Please check your connection and try again, or get a demo key to access the full Lumra AI experience!",
+                    text: "I'm sorry, I encountered an error. Please check your connection and try again, or get a demo key to access the full Elura AI experience!",
                 },
             ])
         } finally {
@@ -1243,7 +1243,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 rounded-full opacity-10 group-hover:opacity-20 blur-lg transition-opacity duration-500" />
                                     
                                     <Zap className="w-4 h-4 text-cyan-400 relative z-10" />
-                                    <span className="text-sm tracking-widest text-gray-300 uppercase relative z-10 font-semibold">POWERED BY <span className="text-white">LUMRA AI</span></span>
+                                    <span className="text-sm tracking-widest text-gray-300 uppercase relative z-10 font-semibold">POWERED BY <span className="text-white">ELURA AI</span></span>
                                     <Zap className="w-4 h-4 text-cyan-400 relative z-10" />
                                 </div>
 
@@ -1314,7 +1314,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                         <div className="relative max-w-5xl mx-auto text-center">
                             <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">Get Started with Your Demo Key</h2>
                             <p className="text-gray-400 mb-12 text-lg max-w-2xl mx-auto">
-                                Enter your demo key to access Lumra AI and start your personalized learning journey.
+                                Enter your demo key to access Elura AI and start your personalized learning journey.
                             </p>
                             <form onSubmit={handleDemoKeySubmit} className="max-w-md mx-auto">
                                 <div className="flex gap-3 mb-4">

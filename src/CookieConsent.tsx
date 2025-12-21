@@ -197,13 +197,13 @@ export default function CookieConsent() {
                                 <div className="space-y-3">
                                     <p>
                                         <strong className="text-white">Acceptance of Terms:</strong><br />
-                                        By accessing and using Lumra AI, you accept and agree to be bound by the terms and 
+                                        By accessing and using Elura AI, you accept and agree to be bound by the terms and 
                                         provision of this agreement. If you do not agree to these terms, please do not use 
                                         our service.
                                     </p>
                                     <p>
                                         <strong className="text-white">Use License:</strong><br />
-                                        Permission is granted to temporarily use Lumra AI for personal, non-commercial 
+                                        Permission is granted to temporarily use Elura AI for personal, non-commercial 
                                         transitory viewing only. This is the grant of a license, not a transfer of title, and 
                                         under this license you may not:
                                     </p>
@@ -220,7 +220,7 @@ export default function CookieConsent() {
                                     </p>
                                     <p>
                                         <strong className="text-white">Privacy:</strong><br />
-                                        Your use of Lumra AI is also governed by our Privacy Policy. Please review our Privacy 
+                                        Your use of Elura AI is also governed by our Privacy Policy. Please review our Privacy 
                                         Policy to understand our practices regarding the collection and use of your information.
                                     </p>
                                 </div>
@@ -231,19 +231,19 @@ export default function CookieConsent() {
                                 <h3 className="text-xl font-bold text-white mb-3">Disclaimer</h3>
                                 <div className="space-y-3">
                                     <p>
-                                        The materials on Lumra AI's website are provided on an 'as is' basis. Lumra AI makes no 
+                                        The materials on Elura AI's website are provided on an 'as is' basis. Elura AI makes no 
                                         warranties, expressed or implied, and hereby disclaims and negates all other warranties 
                                         including, without limitation, implied warranties or conditions of merchantability, fitness 
                                         for a particular purpose, or non-infringement of intellectual property or other violation of rights.
                                     </p>
                                     <p>
-                                        Further, Lumra AI does not warrant or make any representations concerning the accuracy, 
+                                        Further, Elura AI does not warrant or make any representations concerning the accuracy, 
                                         likely results, or reliability of the use of the materials on its website or otherwise 
                                         relating to such materials or on any sites linked to this site.
                                     </p>
                                     <p>
                                         <strong className="text-white">Educational Purpose:</strong><br />
-                                        Lumra AI is designed for educational purposes. While we strive to provide accurate and 
+                                        Elura AI is designed for educational purposes. While we strive to provide accurate and 
                                         up-to-date information, we cannot guarantee the completeness or accuracy of all content. 
                                         Users should verify information independently when necessary.
                                     </p>
