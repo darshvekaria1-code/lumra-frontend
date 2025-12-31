@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react"
 import "./App.css"
 import LandingPage from "./LandingPage"
 import CookieConsent from "./CookieConsent"
+import { NewYearCountdown, FireworksBackground } from "./components/NewYearCountdown"
 
 type ResponseState = {
     status: "idle" | "loading" | "success" | "error"
@@ -314,6 +315,8 @@ function isValidPassword(password: string): { valid: boolean; error?: string } {
 }
 
 export function App() {
+    const [showFireworks, setShowFireworks] = useState(false)
+    
     // Always check fresh on mount to ensure correct initial state
     const [isLoggedIn, setIsLoggedInState] = useState<boolean>(() => {
         // Clear any invalid tokens on initial load
@@ -1488,6 +1491,10 @@ export function App() {
                     }}
                 />
                 <CookieConsent />
+                {/* New Year Countdown Popup */}
+                <NewYearCountdown onFireworksStart={() => setShowFireworks(true)} />
+                {/* Fireworks Background - Continuous after countdown */}
+                {showFireworks && <FireworksBackground />}
             </>
         )
     }
@@ -2186,7 +2193,7 @@ export function App() {
                     {/* Mini Sidebar - Inside Floating Panel */}
                     <div className="lumra-mini-sidebar">
                         <div className="mini-sidebar-logo">
-                            <div className="lumra-black-logo" style={{ width: '32px', height: '32px', fontSize: '1rem' }}>L</div>
+                            <div className="lumra-black-logo" style={{ width: '32px', height: '32px', fontSize: '1rem' }}>E</div>
                         </div>
                         <div className="mini-sidebar-icons">
                             <button
@@ -3109,7 +3116,7 @@ export function App() {
                 <div className="lumra-welcome-animation">
                     <div className="welcome-animation-content">
                         <div className="welcome-logo-container">
-                            <div className="welcome-logo">L</div>
+                            <div className="welcome-logo">E</div>
                             <div className="welcome-orbits">
                                 <div className="orbit orbit-1"></div>
                                 <div className="orbit orbit-2"></div>
@@ -3137,7 +3144,7 @@ export function App() {
                 <div className="lumra-ai-activation">
                     <div className="ai-activation-content">
                         <div className="ai-activation-logo">
-                            <div className="ai-logo-inner">L</div>
+                            <div className="ai-logo-inner">E</div>
                             <div className="ai-ripple-ring ring-1"></div>
                             <div className="ai-ripple-ring ring-2"></div>
                             <div className="ai-ripple-ring ring-3"></div>
@@ -3164,6 +3171,12 @@ export function App() {
 
             {/* Cookie Consent Popup */}
             <CookieConsent />
+
+            {/* New Year Countdown Popup */}
+            <NewYearCountdown onFireworksStart={() => setShowFireworks(true)} />
+
+            {/* Fireworks Background - Continuous after countdown */}
+            {showFireworks && <FireworksBackground />}
         </div>
     )
 }

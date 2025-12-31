@@ -14,7 +14,7 @@ body,
 #root {
     min-height: 100vh;
     margin: 0;
-    background: radial-gradient(circle at top, #eef2ff, #f8fafc 55%);
+    background: transparent;
     position: relative;
     transition: background 0.3s ease;
     -webkit-overflow-scrolling: touch;

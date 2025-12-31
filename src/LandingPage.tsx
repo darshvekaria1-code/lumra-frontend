@@ -4,6 +4,7 @@ import {
   MessageCircle, Send, Loader, Mail, Github, Linkedin, Twitter 
 } from "lucide-react"
 import "./LandingPage.css"
+import { LaptopAnimation } from "./components/LaptopAnimation"
 
 // Scroll Animation Hook - Non-intrusive version
 function useScrollAnimation() {
@@ -65,7 +66,7 @@ type LandingPageProps = {
     onDemoKeySubmit: (key: string) => void
 }
 
-// Logo Component with animated gradient L
+// Logo Component with animated gradient E
 function Logo({ size = 40 }: { size?: number }) {
     return (
         <div className="relative flex items-center gap-3">
@@ -107,6 +108,28 @@ function Logo({ size = 40 }: { size?: number }) {
                 />
                 <rect
                     x="25"
+                    y="20"
+                    width="38"
+                    height="12"
+                    rx="2"
+                    fill="url(#gradient1)"
+                    opacity="0.3"
+                    filter="url(#glow)"
+                    className="animate-pulse"
+                />
+                <rect
+                    x="25"
+                    y="44"
+                    width="30"
+                    height="12"
+                    rx="2"
+                    fill="url(#gradient1)"
+                    opacity="0.3"
+                    filter="url(#glow)"
+                    className="animate-pulse"
+                />
+                <rect
+                    x="25"
                     y="68"
                     width="38"
                     height="12"
@@ -117,7 +140,8 @@ function Logo({ size = 40 }: { size?: number }) {
                     className="animate-pulse"
                 />
                 
-                {/* Main L shape with gradient */}
+                {/* Main E shape with gradient */}
+                {/* Vertical line (left) */}
                 <rect
                     x="25"
                     y="20"
@@ -127,6 +151,27 @@ function Logo({ size = 40 }: { size?: number }) {
                     fill="url(#gradient1)"
                     filter="url(#glow)"
                 />
+                {/* Top horizontal line */}
+                <rect
+                    x="25"
+                    y="20"
+                    width="38"
+                    height="12"
+                    rx="2"
+                    fill="url(#gradient1)"
+                    filter="url(#glow)"
+                />
+                {/* Middle horizontal line */}
+                <rect
+                    x="25"
+                    y="44"
+                    width="30"
+                    height="12"
+                    rx="2"
+                    fill="url(#gradient1)"
+                    filter="url(#glow)"
+                />
+                {/* Bottom horizontal line */}
                 <rect
                     x="25"
                     y="68"
@@ -142,7 +187,7 @@ function Logo({ size = 40 }: { size?: number }) {
                     x="27"
                     y="22"
                     width="8"
-                    height="20"
+                    height="8"
                     rx="1"
                     fill="white"
                     opacity="0.4"
@@ -588,6 +633,7 @@ function ScrollRevealText({ children, className = "" }: { children: string; clas
 }
 
 export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
+    const [showLaptopIntro, setShowLaptopIntro] = useState(false) // Disabled laptop intro
     const [demoKey, setDemoKey] = useState("")
     const [demoKeyError, setDemoKeyError] = useState("")
     const [contactEmail, setContactEmail] = useState("")
@@ -1070,8 +1116,15 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         }
     }
 
-    return (
-        <div className="min-h-screen bg-zinc-950 relative landing-page-container">
+    // Landing page content component
+    const landingPageContent = (
+        <div 
+            className="min-h-screen bg-zinc-950 relative landing-page-container"
+            style={{ 
+                display: showLaptopIntro ? "none" : "block",
+                visibility: showLaptopIntro ? "hidden" : "visible"
+            }}
+        >
             <RollingBackground />
 
             {/* Main Content - Naturally Scrollable */}
@@ -1960,4 +2013,16 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             </div>
         </div>
     )
+
+    // Show laptop animation first, then landing page
+    if (showLaptopIntro) {
+        return (
+            <>
+                <LaptopAnimation onComplete={() => setShowLaptopIntro(false)} />
+                <div style={{ display: "none" }}>{landingPageContent}</div>
+            </>
+        )
+    }
+
+    return landingPageContent
 }
