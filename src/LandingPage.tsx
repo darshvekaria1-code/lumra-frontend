@@ -1840,13 +1840,13 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                         className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white text-lg"
                                         style={{ backgroundColor: "#a855f7" }}
                                     >
-                                        L
+                                        E
                                     </div>
                                     <span className="font-bold text-xl text-white" style={{ 
                                         fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                                         letterSpacing: '-0.03em',
                                         fontWeight: 700
-                                    }}>Lumra</span>
+                                    }}>Elura</span>
                                 </div>
                                 <p className="text-gray-400 text-sm leading-relaxed mb-6">
                                     The easiest way to learn from AI-powered courses. Personalized learning paths for students of all levels.
@@ -1937,7 +1937,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
                         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
                             <p className="text-gray-500 text-xs">
-                                &copy; 2025 Lumra AI. All rights reserved. | Made with care by the Lumra team
+                                &copy; 2026 Elura AI. All rights reserved. | Made with care by the Elura team
                             </p>
                             <div className="flex gap-6 text-xs">
                                 <a 

@@ -2,7 +2,6 @@ import { useEffect, useState, useMemo } from "react"
 import "./App.css"
 import LandingPage from "./LandingPage"
 import CookieConsent from "./CookieConsent"
-import { NewYearCountdown, FireworksBackground } from "./components/NewYearCountdown"
 
 type ResponseState = {
     status: "idle" | "loading" | "success" | "error"
@@ -315,8 +314,6 @@ function isValidPassword(password: string): { valid: boolean; error?: string } {
 }
 
 export function App() {
-    const [showFireworks, setShowFireworks] = useState(false)
-    
     // Always check fresh on mount to ensure correct initial state
     const [isLoggedIn, setIsLoggedInState] = useState<boolean>(() => {
         // Clear any invalid tokens on initial load
@@ -1491,10 +1488,6 @@ export function App() {
                     }}
                 />
                 <CookieConsent />
-                {/* New Year Countdown Popup */}
-                <NewYearCountdown onFireworksStart={() => setShowFireworks(true)} />
-                {/* Fireworks Background - Continuous after countdown */}
-                {showFireworks && <FireworksBackground />}
             </>
         )
     }
@@ -3171,12 +3164,6 @@ export function App() {
 
             {/* Cookie Consent Popup */}
             <CookieConsent />
-
-            {/* New Year Countdown Popup */}
-            <NewYearCountdown onFireworksStart={() => setShowFireworks(true)} />
-
-            {/* Fireworks Background - Continuous after countdown */}
-            {showFireworks && <FireworksBackground />}
         </div>
     )
 }
