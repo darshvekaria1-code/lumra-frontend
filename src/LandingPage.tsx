@@ -54,13 +54,21 @@ function useScrollAnimation() {
 // Use relative URL to hide backend URL from frontend inspection
 const getApiBaseUrl = () => {
     if (import.meta.env.PROD) {
-        return import.meta.env.VITE_LUMRA_API_BASE || ''
+        const base = import.meta.env.VITE_LUMRA_API_BASE || ''
+        return base.endsWith('/') ? base.slice(0, -1) : base
     } else {
-        return ''
+        return '' // Empty string means use relative URL (Vite proxy will handle it)
     }
 }
 
 const API_BASE_URL = getApiBaseUrl()
+
+// Helper to construct API URLs properly
+const getApiUrl = (endpoint: string) => {
+    const base = API_BASE_URL
+    const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
+    return base ? `${base}${path}` : path
+}
 
 type LandingPageProps = {
     onDemoKeySubmit: (key: string) => void
@@ -683,8 +691,12 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
         setDemoKeyError("")
         try {
-            const apiUrl = `${API_BASE_URL}/api/demo/validate`
+            const apiUrl = getApiUrl('/api/demo/validate')
             console.log(`[Demo Key] Validating key: ${demoKey.trim()}, API URL: ${apiUrl}`)
+            
+            // Add timeout to fetch request
+            const controller = new AbortController()
+            const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
             
             const response = await fetch(apiUrl, {
                 method: "POST",
@@ -693,7 +705,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 },
                 body: JSON.stringify({ key: demoKey.trim() }),
                 credentials: 'include', // Include cookies for CORS
+                signal: controller.signal,
             })
+            
+            clearTimeout(timeoutId)
 
             console.log(`[Demo Key] Response status: ${response.status}, ok: ${response.ok}`)
 
@@ -715,8 +730,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             }
         } catch (error) {
             console.error("[Demo Key] Error validating demo key:", error)
-            if (error instanceof TypeError && error.message === "Failed to fetch") {
-                setDemoKeyError("Cannot connect to server. Please ensure the backend is running and try again.")
+            if (error instanceof TypeError && (error.message === "Failed to fetch" || error.message.includes("fetch"))) {
+                setDemoKeyError("Cannot connect to server. Please ensure the backend is running on port 5050 and try again.")
+            } else if (error instanceof Error && error.name === "AbortError") {
+                setDemoKeyError("Request timed out. Please check your connection and try again.")
             } else {
                 setDemoKeyError(`Error validating key: ${error instanceof Error ? error.message : "Network error"}`)
             }
@@ -732,8 +749,12 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
         setHeaderDemoKeyError("")
         try {
-            const apiUrl = `${API_BASE_URL}/api/demo/validate`
+            const apiUrl = getApiUrl('/api/demo/validate')
             console.log(`[Demo Key] Validating header key: ${headerDemoKey.trim()}, API URL: ${apiUrl}`)
+            
+            // Add timeout to fetch request
+            const controller = new AbortController()
+            const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
             
             const response = await fetch(apiUrl, {
                 method: "POST",
@@ -742,7 +763,10 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 },
                 body: JSON.stringify({ key: headerDemoKey.trim() }),
                 credentials: 'include', // Include cookies for CORS
+                signal: controller.signal,
             })
+            
+            clearTimeout(timeoutId)
 
             console.log(`[Demo Key] Header response status: ${response.status}, ok: ${response.ok}`)
 
@@ -766,8 +790,14 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             }
         } catch (error) {
             console.error("[Demo Key] Header error validating demo key:", error)
-            const errorMessage = error instanceof Error ? error.message : String(error)
-            setHeaderDemoKeyError(`Error validating key: ${errorMessage}. Check console for details.`)
+            if (error instanceof TypeError && (error.message === "Failed to fetch" || error.message.includes("fetch"))) {
+                setHeaderDemoKeyError("Cannot connect to server. Please ensure the backend is running on port 5050 and try again.")
+            } else if (error instanceof Error && error.name === "AbortError") {
+                setHeaderDemoKeyError("Request timed out. Please check your connection and try again.")
+            } else {
+                const errorMessage = error instanceof Error ? error.message : String(error)
+                setHeaderDemoKeyError(`Error validating key: ${errorMessage}`)
+            }
         }
     }
 
