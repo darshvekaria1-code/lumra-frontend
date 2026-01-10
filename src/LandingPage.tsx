@@ -683,6 +683,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
         setDemoKeyError("")
         try {
+            console.log(`[Demo Key] Validating key: ${demoKey.trim()}, API URL: ${API_BASE_URL}/api/demo/validate`)
             const response = await fetch(`${API_BASE_URL}/api/demo/validate`, {
                 method: "POST",
                 headers: {
@@ -691,17 +692,27 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 body: JSON.stringify({ key: demoKey.trim() }),
             })
 
-            const data = await response.json()
+            console.log(`[Demo Key] Response status: ${response.status}, ok: ${response.ok}`)
 
-            if (response.ok && data.valid) {
+            if (!response.ok) {
+                const errorText = await response.text()
+                console.error(`[Demo Key] Response error: ${errorText}`)
+                setDemoKeyError(`Server error: ${response.status}. ${errorText}`)
+                return
+            }
+
+            const data = await response.json()
+            console.log(`[Demo Key] Response data:`, data)
+
+            if (data.valid) {
                 localStorage.setItem("lumra_demo_key", demoKey.trim())
                 onDemoKeySubmit(demoKey.trim())
             } else {
                 setDemoKeyError(data.message || "Invalid demo key")
             }
         } catch (error) {
-            console.error("Error validating demo key:", error)
-            setDemoKeyError("Error validating key. Please try again.")
+            console.error("[Demo Key] Error validating demo key:", error)
+            setDemoKeyError(`Error validating key: ${error instanceof Error ? error.message : "Network error"}`)
         }
     }
 
@@ -714,6 +725,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
         setHeaderDemoKeyError("")
         try {
+            console.log(`[Demo Key] Validating header key: ${headerDemoKey.trim()}, API URL: ${API_BASE_URL}/api/demo/validate`)
             const response = await fetch(`${API_BASE_URL}/api/demo/validate`, {
                 method: "POST",
                 headers: {
@@ -722,9 +734,19 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 body: JSON.stringify({ key: headerDemoKey.trim() }),
             })
 
-            const data = await response.json()
+            console.log(`[Demo Key] Header response status: ${response.status}, ok: ${response.ok}`)
 
-            if (response.ok && data.valid) {
+            if (!response.ok) {
+                const errorText = await response.text()
+                console.error(`[Demo Key] Header response error: ${errorText}`)
+                setHeaderDemoKeyError(`Server error: ${response.status}. ${errorText}`)
+                return
+            }
+
+            const data = await response.json()
+            console.log(`[Demo Key] Header response data:`, data)
+
+            if (data.valid) {
                 localStorage.setItem("lumra_demo_key", headerDemoKey.trim())
                 setShowDemoModal(false)
                 setHeaderDemoKey("")
@@ -733,8 +755,9 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                 setHeaderDemoKeyError(data.message || "Invalid demo key")
             }
         } catch (error) {
-            console.error("Error validating demo key:", error)
-            setHeaderDemoKeyError("Error validating key. Please try again.")
+            console.error("[Demo Key] Header error validating demo key:", error)
+            const errorMessage = error instanceof Error ? error.message : String(error)
+            setHeaderDemoKeyError(`Error validating key: ${errorMessage}. Check console for details.`)
         }
     }
 
@@ -987,7 +1010,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             },
             "Terms of Service": {
                 title: "Terms of Service",
-                message: "By using Lumra AI, you agree to use the platform responsibly and for educational purposes only. We reserve the right to modify these terms. For the complete terms of service, please contact us at darshvekaria1@gmail.com."
+                message: "By using Elura AI, you agree to use the platform responsibly and for educational purposes only. We reserve the right to modify these terms. For the complete terms of service, please contact us at darshvekaria1@gmail.com."
             },
             "Cookie Policy": {
                 title: "Cookie Policy",
@@ -995,7 +1018,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             },
             "Compliance": {
                 title: "Compliance",
-                message: "Lumra AI complies with data protection regulations including GDPR and COPPA. We maintain high standards for student data privacy and security. For compliance inquiries, contact us at darshvekaria1@gmail.com."
+                message: "Elura AI complies with data protection regulations including GDPR and COPPA. We maintain high standards for student data privacy and security. For compliance inquiries, contact us at darshvekaria1@gmail.com."
             }
         }
 
@@ -1406,7 +1429,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                                     Everything You Need to Learn
                                 </h2>
                                 <ScrollRevealText className="text-gray-400 max-w-3xl mx-auto text-lg leading-relaxed">
-                                    Lumra combines cutting-edge AI technology with personalized learning methodology. Get adaptive courses,
+                                    Elura combines cutting-edge AI technology with personalized learning methodology. Get adaptive courses,
                                     intelligent feedback, and career-focused content designed specifically for modern learners who want to
                                     succeed.
                                 </ScrollRevealText>
@@ -1458,7 +1481,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
                             </h2>
 
                             <p className="text-xl text-gray-400 mb-12 max-w-3xl">
-                                Optimized Learning for International Baccalaureate and IGCSE Students. Lumra AI is specifically designed to
+                                Optimized Learning for International Baccalaureate and IGCSE Students. Elura AI is specifically designed to
                                 support students through their academic journeys with curriculum-aligned content and expert guidance.
                             </p>
 

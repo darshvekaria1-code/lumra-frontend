@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react"
 import "./App.css"
 import LandingPage from "./LandingPage"
 import CookieConsent from "./CookieConsent"
+import Dashboard from "./Dashboard"
 
 type ResponseState = {
     status: "idle" | "loading" | "success" | "error"
@@ -389,7 +390,7 @@ export function App() {
     // Check demo key revocation status
     const checkDemoKeyStatus = async () => {
         const storedKey = localStorage.getItem("lumra_demo_key")
-        if (storedKey !== "112211") {
+        if (storedKey !== "12121") {
             // No valid demo key, nothing to check
             return
         }
@@ -468,11 +469,11 @@ export function App() {
         
         // Clean up invalid demo keys and check revocation status
         const storedKey = localStorage.getItem("lumra_demo_key")
-        if (storedKey && storedKey !== "112211") {
+        if (storedKey && storedKey !== "12121") {
             // Invalid demo key - remove it
             localStorage.removeItem("lumra_demo_key")
             setHasValidDemoKey(false)
-        } else if (storedKey === "112211") {
+        } else if (storedKey === "12121") {
             // Valid demo key found - check revocation status BEFORE allowing access
             console.log("[Demo Key] Valid demo key found, checking revocation status...")
             checkDemoKeyStatus().then((isValid) => {
@@ -497,7 +498,7 @@ export function App() {
     // Periodically check demo key status if user has demo key
     useEffect(() => {
         const storedKey = localStorage.getItem("lumra_demo_key")
-        if (storedKey === "112211") {
+        if (storedKey === "12121") {
             console.log("[Demo Key] Setting up periodic revocation check (every 5 seconds)")
             
             // Check immediately
@@ -506,7 +507,7 @@ export function App() {
             // Check every 5 seconds (very frequent for immediate response)
             const interval = setInterval(() => {
                 const currentKey = localStorage.getItem("lumra_demo_key")
-                if (currentKey === "112211") {
+                if (currentKey === "12121") {
                     console.log("[Demo Key] Periodic check running...")
                     checkDemoKeyStatus()
                 } else {
@@ -1986,120 +1987,10 @@ export function App() {
     return (
         <div className={`lumra-shell ${sidebarExpanded ? "ai-active" : ""}`}>
             <div className="lumra-content">
-                <header className="lumra-header">
-                    <div>
-                        <p className="eyebrow">Elura AI · Combined Intelligence</p>
-                        <h1>Powered by Elura AI</h1>
-                        <p className="subhead">
-                            Ask once, get a unified answer that combines the best insights from both AI models. Elura learns your communication style and adapts over time.
-                        </p>
-                    </div>
-                    <div style={{ display: "flex", gap: "12px", alignItems: "center", position: "relative" }}>
-                        <div className={`lumra-ai-badge ${maintenanceMode?.enabled ? "maintenance-mode" : ""}`}>
-                            <span className={`lumra-dot ${maintenanceMode?.enabled ? "maintenance-dot" : ""}`} />
-                            Elura AI
-                            {maintenanceMode?.enabled && (
-                                <span style={{ 
-                                    marginLeft: "8px", 
-                                    fontSize: "0.75rem", 
-                                    color: "#ef4444",
-                                    fontWeight: 600
-                                }}>
-                                    Maintenance
-                                </span>
-                            )}
-                        </div>
-                        <div style={{ position: "relative" }}>
-                            <button 
-                                className="ghost" 
-                                onClick={() => setShowHistoryDropdown(!showHistoryDropdown)}
-                                style={{ padding: "8px 16px", fontSize: "0.9rem", display: "flex", alignItems: "center", gap: "6px" }}
-                                title="Chat History"
-                            >
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                                </svg>
-                                History
-                                {conversationSessions.length > 0 && (
-                                    <span style={{ 
-                                        backgroundColor: "#6366f1", 
-                                        color: "white", 
-                                        borderRadius: "10px", 
-                                        padding: "2px 6px", 
-                                        fontSize: "0.75rem",
-                                        minWidth: "18px",
-                                        textAlign: "center"
-                                    }}>
-                                        {conversationSessions.length}
-                                    </span>
-                                )}
-                            </button>
-                            {showHistoryDropdown && (
-                                <>
-                                    <div 
-                                        className="history-dropdown-overlay"
-                                        onClick={() => setShowHistoryDropdown(false)}
-                                    />
-                                    <div className="history-dropdown">
-                                        <div className="history-dropdown-header">
-                                            <h3>Chat History</h3>
-                                            <button 
-                                                className="ghost"
-                                                onClick={startNewConversation}
-                                                style={{ padding: "6px 12px", fontSize: "0.85rem" }}
-                                            >
-                                                + New Chat
-                                            </button>
-                                        </div>
-                                        <div className="history-dropdown-list">
-                                            {conversationSessions.length === 0 ? (
-                                                <div style={{ padding: "24px", textAlign: "center", color: "#64748b" }}>
-                                                    No conversations yet. Start chatting to see history here.
-                                                </div>
-                                            ) : (
-                                                conversationSessions
-                                                    .sort((a, b) => b.updatedAt - a.updatedAt)
-                                                    .map((session) => (
-                                                        <div
-                                                            key={session.id}
-                                                            className={`history-item ${currentSessionId === session.id ? "active" : ""}`}
-                                                            onClick={() => loadConversationSession(session.id)}
-                                                        >
-                                                            <div className="history-item-content">
-                                                                <div className="history-item-title">{session.title}</div>
-                                                                <div className="history-item-meta">
-                                                                    <span>{session.messages.length} messages</span>
-                                                                    <span>·</span>
-                                                                    <span>{formatTimestamp(session.updatedAt)}</span>
-                                                                </div>
-                                                            </div>
-                                                            <button
-                                                                className="history-item-delete"
-                                                                onClick={(e) => deleteConversationSession(session.id, e)}
-                                                                title="Delete conversation"
-                                                            >
-                                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                                    <path d="M18 6L6 18M6 6l12 12" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                    ))
-                                            )}
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                        <button className="ghost" onClick={handleLogout} style={{ padding: "8px 16px", fontSize: "0.9rem" }}>
-                            Logout
-                        </button>
-                    </div>
-                </header>
-                {/* Main content area - add your website content here */}
-                <div className="main-content">
-                    <p style={{ color: "#64748b", marginTop: "48px" }}>
-                        Your main website content goes here. The Elura AI sidebar is on the right.
-                    </p>
+                {/* Dashboard component has its own header, so we hide the old header */}
+                {/* Main content area - Dashboard */}
+                <div className="main-content" style={{ padding: 0 }}>
+                    <Dashboard />
                 </div>
             </div>
 
