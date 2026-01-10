@@ -683,13 +683,16 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
         setDemoKeyError("")
         try {
-            console.log(`[Demo Key] Validating key: ${demoKey.trim()}, API URL: ${API_BASE_URL}/api/demo/validate`)
-            const response = await fetch(`${API_BASE_URL}/api/demo/validate`, {
+            const apiUrl = `${API_BASE_URL}/api/demo/validate`
+            console.log(`[Demo Key] Validating key: ${demoKey.trim()}, API URL: ${apiUrl}`)
+            
+            const response = await fetch(apiUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ key: demoKey.trim() }),
+                credentials: 'include', // Include cookies for CORS
             })
 
             console.log(`[Demo Key] Response status: ${response.status}, ok: ${response.ok}`)
@@ -712,7 +715,11 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
             }
         } catch (error) {
             console.error("[Demo Key] Error validating demo key:", error)
-            setDemoKeyError(`Error validating key: ${error instanceof Error ? error.message : "Network error"}`)
+            if (error instanceof TypeError && error.message === "Failed to fetch") {
+                setDemoKeyError("Cannot connect to server. Please ensure the backend is running and try again.")
+            } else {
+                setDemoKeyError(`Error validating key: ${error instanceof Error ? error.message : "Network error"}`)
+            }
         }
     }
 
@@ -725,13 +732,16 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
 
         setHeaderDemoKeyError("")
         try {
-            console.log(`[Demo Key] Validating header key: ${headerDemoKey.trim()}, API URL: ${API_BASE_URL}/api/demo/validate`)
-            const response = await fetch(`${API_BASE_URL}/api/demo/validate`, {
+            const apiUrl = `${API_BASE_URL}/api/demo/validate`
+            console.log(`[Demo Key] Validating header key: ${headerDemoKey.trim()}, API URL: ${apiUrl}`)
+            
+            const response = await fetch(apiUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ key: headerDemoKey.trim() }),
+                credentials: 'include', // Include cookies for CORS
             })
 
             console.log(`[Demo Key] Header response status: ${response.status}, ok: ${response.ok}`)
