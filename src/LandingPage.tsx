@@ -731,7 +731,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         } catch (error) {
             console.error("[Demo Key] Error validating demo key:", error)
             if (error instanceof TypeError && (error.message === "Failed to fetch" || error.message.includes("fetch"))) {
-                setDemoKeyError("Cannot connect to server. Please ensure the backend is running on port 5050 and try again.")
+                setDemoKeyError("Cannot connect to server. Please ensure the backend server is running on port 5050. Start it with: cd lumra && npm start")
             } else if (error instanceof Error && error.name === "AbortError") {
                 setDemoKeyError("Request timed out. Please check your connection and try again.")
             } else {
@@ -791,7 +791,7 @@ export default function LandingPage({ onDemoKeySubmit }: LandingPageProps) {
         } catch (error) {
             console.error("[Demo Key] Header error validating demo key:", error)
             if (error instanceof TypeError && (error.message === "Failed to fetch" || error.message.includes("fetch"))) {
-                setHeaderDemoKeyError("Cannot connect to server. Please ensure the backend is running on port 5050 and try again.")
+                setHeaderDemoKeyError("Cannot connect to server. Please ensure the backend server is running on port 5050. Start it with: cd lumra && npm start")
             } else if (error instanceof Error && error.name === "AbortError") {
                 setHeaderDemoKeyError("Request timed out. Please check your connection and try again.")
             } else {
